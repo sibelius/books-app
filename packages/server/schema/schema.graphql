@@ -1,0 +1,157 @@
+input MeEditInput {
+  """User name. ex: Jean"""
+  name: String
+
+  """Language of the user. ex: pt"""
+  lang: String
+  clientMutationId: String
+}
+
+type MeEditPayload {
+  me: User
+
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
+}
+
+type Mutation {
+  UserLogin(input: UserLoginInput!): UserLoginPayload
+  UserRegistration(input: UserRegistrationInput!): UserRegistrationPayload
+  MeEdit(input: MeEditInput!): MeEditPayload
+  UserForgotPassword(input: UserForgotPasswordInput!): UserForgotPasswordPayload
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""The root of all... queries"""
+type Query {
+  """The ID of an object"""
+  id: ID!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID
+  ): Node
+
+  """Fetches objects given their IDs"""
+  nodes(
+    """The IDs of objects"""
+    ids: [ID!]!
+  ): [Node]!
+
+  """Me is the logged User"""
+  me: User
+  status: Status
+}
+
+"""Status"""
+type Status {
+  """Books app environment"""
+  env: String
+
+  """Server build version"""
+  version: String
+
+  """Server commit sha, GITHUB_SHA"""
+  commitSha: String
+
+  """Books app environment"""
+  e: String
+
+  """Server build version"""
+  v: String
+
+  """Server commit sha, GITHUB_SHA"""
+  c: String
+}
+
+"""Represents an user"""
+type User implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """MongoDB _id"""
+  _id: String!
+
+  """User name resolver"""
+  name: String
+
+  """User surname resolver"""
+  surname: String
+
+  """User name resolver"""
+  fullName: String
+
+  """User email resolver"""
+  email: String
+
+  """User email resolver"""
+  emailWasVerified: String
+  lang: String
+
+  """The soft delete status."""
+  isActive: Boolean
+
+  """The hard delete status."""
+  removedAt: String
+
+  """The date that the node was created."""
+  createdAt: String
+
+  """The date that the node was last updated."""
+  updatedAt: String
+}
+
+input UserForgotPasswordInput {
+  email: String!
+  clientMutationId: String
+}
+
+type UserForgotPasswordPayload {
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
+}
+
+input UserLoginInput {
+  """User email to be used on login. ex: jean@gmail.com"""
+  email: String!
+
+  """User password."""
+  password: String!
+  clientMutationId: String
+}
+
+type UserLoginPayload {
+  token: String
+
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
+}
+
+input UserRegistrationInput {
+  """User name. ex: Jean"""
+  name: String!
+
+  """User email to be used on login. ex: jean@gmail.com"""
+  email: String!
+
+  """User password."""
+  password: String!
+  clientMutationId: String
+}
+
+type UserRegistrationPayload {
+  token: String
+
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
+}

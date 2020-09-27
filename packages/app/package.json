@@ -1,0 +1,39 @@
+{
+  "name": "@booksapp/app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "relay": "relay-compiler"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-flow-strip-types": "^7.10.4",
+    "babel-plugin-optional-require": "^0.3.1",
+    "react": "16.13.1",
+    "react-native": "0.63.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-export-default-from": "^7.10.4",
+    "@babel/plugin-proposal-export-namespace-from": "^7.10.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@babel/plugin-transform-async-to-generator": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "@babel/runtime": "^7.11.2",
+    "@types/react-native": "^0.63.22",
+    "@types/relay-runtime": "^10.0.4",
+    "babel-plugin-idx": "^2.4.0",
+    "babel-plugin-styled-components": "^1.11.1",
+    "metro-react-native-babel-preset": "^0.63.0",
+    "react-native-dotenv": "^0.2.0",
+    "relay-compiler": "^10.0.1",
+    "relay-compiler-language-typescript": "^13.0.1",
+    "relay-config": "^10.0.1",
+    "relay-runtime": "^10.0.1"
+  }
+}

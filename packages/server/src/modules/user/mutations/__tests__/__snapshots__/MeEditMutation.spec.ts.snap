@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MeEditMutation should edit context user 1`] = `
+Object {
+  "data": Object {
+    "MeEdit": Object {
+      "error": "EMPTY",
+      "me": Object {
+        "email": "user1@example.com",
+        "id": "FROZEN-ID",
+        "lang": "pt",
+      },
+    },
+  },
+}
+`;
