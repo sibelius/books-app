@@ -4,6 +4,7 @@ declare namespace NodeJS {
     __MONGO_DB_NAME__: string;
     __COUNTERS__: {
       user: 0;
+      book: 0;
     };
   }
 }

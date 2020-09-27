@@ -1,3 +1,113 @@
+"""Represents a Book"""
+type Book implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """MongoDB _id"""
+  _id: String!
+
+  """The book name. ex: O Alienista"""
+  name: String
+
+  """The book author. ex: Machado de Assis"""
+  author: String
+
+  """The book description."""
+  description: String
+
+  """The book release year. ex: 1882"""
+  releaseYear: Int
+
+  """The book total page. ex: 96"""
+  pages: Int
+
+  """The book price. ex: 20"""
+  price: Float
+
+  """The book banner url."""
+  bannerUrl: String
+
+  """The book banner ISBN. ex: 9780850515060"""
+  ISBN: Int
+
+  """The book language. ex: Portuguese"""
+  language: String
+
+  """The soft delete status."""
+  isActive: Boolean
+
+  """The hard delete status."""
+  removedAt: String
+
+  """The date that the node was created."""
+  createdAt: String
+
+  """The date that the node was last updated."""
+  updatedAt: String
+}
+
+"""A connection to a list of items."""
+type BookConnection {
+  """Number of items in this connection"""
+  count: Int!
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+    This allows a client to fetch the first five objects by passing "5" as the
+    argument to "first", then fetch the total count so it could display "5 of 83",
+    for example.
+  """
+  totalCount: Int!
+
+  """Offset from start"""
+  startCursorOffset: Int!
+
+  """Offset till end"""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfoExtended!
+
+  """A list of edges."""
+  edges: [BookEdge]!
+}
+
+"""An edge in a connection."""
+type BookEdge {
+  """The item at the end of the edge"""
+  node: Book!
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Used to filter book"""
+input BookFilters {
+  OR: [BookFilters]
+  AND: [BookFilters]
+
+  """[{ direction: 'ASC', sort: 'CREATED_AT' }]"""
+  orderBy: [BookOrdering!]
+
+  """Filter by search string. Name, author or description."""
+  search: String
+}
+
+"""Used to order books"""
+input BookOrdering {
+  sort: BookSortEnumType!
+  direction: DirectionEnum!
+}
+
+enum BookSortEnumType {
+  CREATED_AT
+}
+
+enum DirectionEnum {
+  ASC
+  DESC
+}
+
 input MeEditInput {
   """User name. ex: Jean"""
   name: String
@@ -28,6 +138,21 @@ interface Node {
   id: ID!
 }
 
+"""Information about pagination in a connection."""
+type PageInfoExtended {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
 """The root of all... queries"""
 type Query {
   """The ID of an object"""
@@ -48,6 +173,9 @@ type Query {
   """Me is the logged User"""
   me: User
   status: Status
+
+  """Connection to all me books"""
+  books(after: String, first: Int, before: String, last: Int, filters: BookFilters): BookConnection!
 }
 
 """Status"""
