@@ -1,6 +1,6 @@
 const path = require('path');
 
-const packages = [];
+const packages = ['relay'];
 
 module.exports = {
   projectRoot: path.resolve(__dirname, '.'),

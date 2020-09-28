@@ -1,6 +1,7 @@
 module.exports = {
   presets: ['@babel/preset-react', 'module:metro-react-native-babel-preset'],
   plugins: [
+    'relay',
     '@babel/plugin-transform-flow-strip-types',
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-export-default-from',
