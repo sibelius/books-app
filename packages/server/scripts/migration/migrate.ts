@@ -25,10 +25,7 @@ const logger = new Signale({ interactive: true, scope: 'migrating' });
 function getInfoFromMigrationFilename(fileName: string) {
   const pieces = fileName.split('-');
   const date = moment.utc(pieces[0], 'YYYYMMDDHHmmss');
-  const name = pieces
-    .slice(1)
-    .join('-')
-    .split('.')[0];
+  const name = pieces.slice(1).join('-').split('.')[0];
   const fullPath = m(fileName);
 
   return {
@@ -89,7 +86,7 @@ async function run() {
   logger.await('retrieving migration files');
   await delay(DELAY_LOGS);
 
-  const files = fs.readdirSync(MIGRATIONS_DIR).filter(file => !EXCLUDED_FILES.includes(file));
+  const files = fs.readdirSync(MIGRATIONS_DIR).filter((file) => !EXCLUDED_FILES.includes(file));
   logger.success('retrieving migration files');
 
   logger.await('find latest ran migration');
@@ -108,7 +105,7 @@ async function run() {
     logger.info('verifying if all migrations were already run');
     delay(DELAY_LOGS);
 
-    const migrations = files.filter(migration => {
+    const migrations = files.filter((migration) => {
       const { name, date } = getInfoFromMigrationFilename(migration);
 
       return latestMigrationInfo.name !== name && date.isSameOrAfter(latestMigrationInfo.createdAt);
@@ -132,7 +129,7 @@ async function run() {
 
 run()
   .then(() => mongoose.disconnect())
-  .catch(err => {
+  .catch((err) => {
     logger.fatal(err);
     mongoose.disconnect();
   });
