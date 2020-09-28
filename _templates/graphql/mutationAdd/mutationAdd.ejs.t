@@ -11,7 +11,7 @@ import { <%= h.inflection.camelize(name) %>Connection } from '../<%= h.inflectio
 
 import errorField from '../../../core/graphql/errorField';
 
-import { GraphQLContext } from '../../../types';
+import { LoggedGraphQLContext } from '../../../types';
 
 type <%= h.inflection.camelize(name) %>AddArgs = {
   name: string;
@@ -28,7 +28,7 @@ const mutation = mutationWithClientMutationId({
       type: GraphQLString,
     },
   },
-  mutateAndGetPayload: async (args: <%= h.inflection.camelize(name) %>AddArgs, context: GraphQLContext) => {
+  mutateAndGetPayload: async (args: <%= h.inflection.camelize(name) %>AddArgs, context: LoggedGraphQLContext) => {
     const { name, description } = args;
 
     const <%= name %> = await new <%= h.inflection.camelize(name) %>Model({

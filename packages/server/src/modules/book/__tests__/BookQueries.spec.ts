@@ -55,7 +55,7 @@ describe('Book queries', () => {
     const result = await graphql(schema, query, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data!.book).not.toBe(null);
+    expect(result.data?.book).not.toBe(null);
     expect(sanitizeTestObject(result.data)).toMatchSnapshot();
   });
 
@@ -84,7 +84,7 @@ describe('Book queries', () => {
     const result = await graphql(schema, query, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data!.book).toBe(null);
+    expect(result.data?.book).toBe(null);
   });
 
   it('should get null Book if isActive is false', async () => {
@@ -113,7 +113,7 @@ describe('Book queries', () => {
     const result = await graphql(schema, query, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data!.book).toBe(null);
+    expect(result.data?.book).toBe(null);
   });
 
   it('should get null Book if removedAt exists', async () => {
@@ -141,7 +141,7 @@ describe('Book queries', () => {
 
     const result = await graphql(schema, query, rootValue, context, variables);
     expect(result.errors).toBeUndefined();
-    expect(result.data!.book).toBe(null);
+    expect(result.data?.book).toBe(null);
   });
 
   it('should query a connection of books', async () => {
@@ -174,8 +174,8 @@ describe('Book queries', () => {
     const result = await graphql(schema, query, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data!.books).not.toBe(null);
-    expect(result.data!.books.edges.length).toBe(5);
+    expect(result.data?.books).not.toBe(null);
+    expect(result.data?.books.edges.length).toBe(5);
     expect(sanitizeTestObject(result.data)).toMatchSnapshot();
   });
 
@@ -214,8 +214,8 @@ describe('Book queries', () => {
     const result = await graphql(schema, query, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data!.books).not.toBe(null);
-    expect(result.data!.books.edges.length).toBe(3);
+    expect(result.data?.books).not.toBe(null);
+    expect(result.data?.books.edges.length).toBe(3);
     expect(sanitizeTestObject(result.data)).toMatchSnapshot();
   });
 
@@ -252,11 +252,11 @@ describe('Book queries', () => {
     const result = await graphql(schema, query, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data!.books).not.toBe(null);
-    expect(result.data!.books.edges.length).toBe(3);
-    expect(result.data!.books.edges[0].node.name).toBe(book1.name);
-    expect(result.data!.books.edges[1].node.name).toBe(book2.name);
-    expect(result.data!.books.edges[2].node.name).toBe(book3.name);
+    expect(result.data?.books).not.toBe(null);
+    expect(result.data?.books.edges.length).toBe(3);
+    expect(result.data?.books.edges[0].node.name).toBe(book1.name);
+    expect(result.data?.books.edges[1].node.name).toBe(book2.name);
+    expect(result.data?.books.edges[2].node.name).toBe(book3.name);
     expect(sanitizeTestObject(result.data)).toMatchSnapshot();
   });
 });

@@ -133,6 +133,9 @@ type Mutation {
   UserRegistration(input: UserRegistrationInput!): UserRegistrationPayload
   MeEdit(input: MeEditInput!): MeEditPayload
   UserForgotPassword(input: UserForgotPasswordInput!): UserForgotPasswordPayload
+  ReviewAdd(input: ReviewAddInput!): ReviewAddPayload
+  ReviewEdit(input: ReviewEditInput!): ReviewEditPayload
+  ReviewRemove(input: ReviewRemoveInput!): ReviewRemovePayload
 }
 
 """An object with an ID"""
@@ -217,6 +220,26 @@ type Review implements Node {
   updatedAt: String
 }
 
+input ReviewAddInput {
+  """The book rated on this review."""
+  bookId: ID!
+
+  """The rating of the review. ex: 4.5"""
+  rating: Float!
+
+  """The review description. ex: This book is awesome"""
+  description: String
+  clientMutationId: String
+}
+
+type ReviewAddPayload {
+  reviewEdge: ReviewEdge
+
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
+}
+
 """A connection to a list of items."""
 type ReviewConnection {
   """Number of items in this connection"""
@@ -252,6 +275,26 @@ type ReviewEdge {
   cursor: String!
 }
 
+input ReviewEditInput {
+  """The global review id."""
+  id: ID!
+
+  """The rating of the review. ex: 4.5"""
+  rating: Float
+
+  """The review description. ex: This book is awesome"""
+  description: String
+  clientMutationId: String
+}
+
+type ReviewEditPayload {
+  reviewEdge: ReviewEdge
+
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
+}
+
 """Used to filter reviews"""
 input ReviewFilters {
   OR: [ReviewFilters]
@@ -271,6 +314,21 @@ input ReviewFilters {
 input ReviewOrdering {
   sort: ReviewSortEnumType!
   direction: DirectionEnum!
+}
+
+input ReviewRemoveInput {
+  """The global review id."""
+  id: ID!
+  clientMutationId: String
+}
+
+type ReviewRemovePayload {
+  """Default success field resolver for mutations"""
+  success: String
+
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
 }
 
 enum ReviewSortEnumType {
