@@ -1,4 +1,4 @@
-import { GraphQLBoolean, GraphQLObjectType, GraphQLObjectTypeConfig, GraphQLString } from 'graphql';
+import { GraphQLObjectType, GraphQLObjectTypeConfig, GraphQLString } from 'graphql';
 import { globalIdField } from 'graphql-relay';
 
 import { NodeInterface, registerType } from '../../interface/NodeInterface';

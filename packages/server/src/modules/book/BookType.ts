@@ -16,6 +16,8 @@ import { connectionDefinitions } from '../../graphql/connection/CustomConnection
 import { mongooseIdResolver } from '../../core/mongoose/mongooseIdResolver';
 import { mongoDocumentStatusResolvers } from '../../core/graphql/mongoDocumentStatusResolvers';
 
+import { ReviewLoader } from '../../loader';
+
 import Book from './BookLoader';
 
 type ConfigType = GraphQLObjectTypeConfig<Book, GraphQLContext>;
@@ -70,6 +72,11 @@ const BookTypeConfig: ConfigType = {
       type: GraphQLString,
       description: 'The book language. ex: Portuguese',
       resolve: (obj) => obj.language,
+    },
+    rating: {
+      type: GraphQLFloat,
+      description: 'The book average rating based on user reviews',
+      resolve: (obj, args, context) => ReviewLoader.loadBookAverageRating(context, obj._id),
     },
     ...mongoDocumentStatusResolvers,
   }),
