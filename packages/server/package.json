@@ -10,7 +10,7 @@
     "clean": "rm -rf build && rm -rf .webpack && rm -rf coverage",
     "copy-to-project": "babel-node webpackx.js ./scripts/copySchemaToProject.js",
     "database:seed": "babel-node webpackx.js ./scripts/seed/seedDatabase",
-    "graphql": "webpack --progress --config webpack.config.js",
+    "graphql": "webpack --progress --config webpack.graphql.js",
     "serve:graphql": "node dist/graphql/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -83,6 +83,7 @@
     "ts-graphql-plugin": "^2.0.1",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
+    "webpack-merge": "^5.1.4",
     "webpack-node-externals": "^2.5.0"
   }
 }

@@ -1,7 +1,7 @@
 const path = require('path');
 
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const ReloadServerPlugin = require('reload-server-webpack-plugin');
 
 const common = require('./webpack.common.js');
