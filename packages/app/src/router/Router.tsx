@@ -79,7 +79,7 @@ const Router = () => {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <NavigationContainer>{state.isSigin ? <Auth /> : <App />}</NavigationContainer>
+      <NavigationContainer>{!state.isSigin ? <Auth /> : <App />}</NavigationContainer>
     </AuthContext.Provider>
   );
 };

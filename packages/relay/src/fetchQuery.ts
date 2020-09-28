@@ -43,8 +43,9 @@ const fetchQuery = async (request: RequestParameters, variables: Variables, uplo
 
     const clientErrorStatus = [401, 403];
     if (clientErrorStatus.includes(response.status)) {
-      clearToken();
-      window.location.replace('/');
+      await clearToken();
+      // @TODO - dispatch route action to reset routes
+      //window.location.replace('/');
       throw data.errors;
     }
 

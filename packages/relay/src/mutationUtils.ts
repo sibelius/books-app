@@ -43,8 +43,6 @@ interface CopyObjScalarsToProxyOptions {
   proxy: RecordProxy;
 }
 
-export const ROOT_ID = 'client:root';
-
 export function listRecordRemoveUpdater({ parentId, itemId, parentFieldName, store }: ListRecordRemoveUpdaterOptions) {
   const parentProxy = store.get(parentId);
   const items = parentProxy.getLinkedRecords(parentFieldName);
