@@ -3,6 +3,7 @@ const path = require('path');
 const packages = [];
 
 module.exports = {
+  projectRoot: path.resolve(__dirname, '.'),
   watchFolders: [
     path.resolve(__dirname, '../../node_modules'),
     ...packages.map((pkg) => path.resolve(__dirname, `../${pkg}`)),

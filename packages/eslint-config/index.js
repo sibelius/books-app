@@ -31,6 +31,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-ignore': 'off',
     '@typescript-eslint/no-empty-function': 'warn',
     'import/named': 'off',
+    'react/prop-types': 'off',
     'no-console': 'error',
     'import/first': 'warn',
     'import/namespace': ['error', { allowComputed: true }],
@@ -58,6 +59,7 @@ module.exports = {
     'react/display-name': ['off', { ignoreTranspilerName: false }],
   },
   settings: {
+    'import/ignore': ['node_modules/react-native/index\\.js$'],
     'import/resolver': {
       node: {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
