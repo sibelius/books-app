@@ -8,10 +8,11 @@ import { GraphQLContext } from '../../types';
 
 import { registerType, NodeInterface } from '../../interface/NodeInterface';
 
-import <%= h.inflection.camelize(name) %> from './<%= h.inflection.camelize(name) %>Loader';
 import { connectionDefinitions } from '../../graphql/connection/CustomConnectionType';
 import { mongooseIdResolver } from '../../core/mongoose/mongooseIdResolver';
 import { mongoDocumentStatusResolvers } from '../../core/graphql/mongoDocumentStatusResolvers';
+
+import <%= h.inflection.camelize(name) %> from './<%= h.inflection.camelize(name) %>Loader';
 
 type ConfigType = GraphQLObjectTypeConfig<<%= h.inflection.camelize(name) %>, GraphQLContext>;
 

@@ -1,6 +1,16 @@
 import { DeepPartial } from '@booksapp/types';
 
-import { ISessionToken, IUser, SESSION_TOKEN_SCOPES, SessionToken, User, Book, IBook } from '../../src/models';
+import {
+  ISessionToken,
+  IUser,
+  SESSION_TOKEN_SCOPES,
+  SessionToken,
+  User,
+  Book,
+  IBook,
+  Review,
+  IReview,
+} from '../../src/models';
 
 import { getObjectId, PLATFORM } from '../../src/common/utils';
 
@@ -42,6 +52,29 @@ export const createBook = async (args: DeepPartial<IBook> = {}) => {
     pages: pages || n * 10,
     price: price || n * 5,
     bannerUrl: bannerUrl || `bannerUrl ${n}`,
+    ...rest,
+  }).save();
+};
+
+export const createReview = async (args: DeepPartial<IReview> = {}) => {
+  const { userId, bookId, rating, ...rest } = args;
+
+  const n = (global.__COUNTERS__.review += 1);
+
+  let userObj;
+  if (!userId) {
+    userObj = await getOrCreate(User, createUser);
+  }
+
+  let bookObj;
+  if (!bookId) {
+    bookObj = await getOrCreate(Book, createBook);
+  }
+
+  return new Review({
+    userId: getObjectId(userId || userObj),
+    bookId: getObjectId(bookId || bookObj),
+    rating: rating || n,
     ...rest,
   }).save();
 };

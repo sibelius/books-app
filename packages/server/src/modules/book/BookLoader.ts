@@ -86,10 +86,10 @@ export const primeCache = ({ dataloaders }: GraphQLContext, id: string, data: IB
 export const clearAndPrimeCache = (context: GraphQLContext, id: string, data: IBook) =>
   clearCache(context, id) && primeCache(context, id, data);
 
-interface IloadBookssArgs extends ConnectionArguments {
+interface IloadBooksArgs extends ConnectionArguments {
   filters?: BookArgFilters;
 }
-export const loadBooks = async (context: GraphQLContext, args: IloadBookssArgs) => {
+export const loadBooks = async (context: GraphQLContext, args: IloadBooksArgs) => {
   const { user } = context;
   const { filters = {} } = args;
 

@@ -2,15 +2,17 @@ import { GraphQLObjectType, GraphQLNonNull } from 'graphql';
 import { globalIdField, connectionArgs } from 'graphql-relay';
 
 import { NodeField, NodesField } from '../../interface/NodeInterface';
-
 import { GraphQLContext } from '../../types';
+
+import { UserLoader, BookLoader, ReviewLoader } from '../../loader';
 
 import UserType from '../../modules/user/UserType';
 
-import { UserLoader, BookLoader } from '../../loader';
-
 import { BookConnection } from '../../modules/book/BookType';
 import BookFiltersInputType from '../../modules/book/filters/BookFiltersInputType';
+
+import { ReviewConnection } from '../../modules/review/ReviewType';
+import ReviewFiltersInputType from '../../modules/review/filters/ReviewFiltersInputType';
 
 import StatusType from './StatusType';
 
@@ -41,6 +43,18 @@ export default new GraphQLObjectType<any, GraphQLContext, any>({
         },
       },
       resolve: (obj, args, context) => BookLoader.loadBooks(context, args),
+    },
+
+    reviews: {
+      type: GraphQLNonNull(ReviewConnection.connectionType),
+      description: 'Connection to all reviews',
+      args: {
+        ...connectionArgs,
+        filters: {
+          type: ReviewFiltersInputType,
+        },
+      },
+      resolve: (obj, args, context) => ReviewLoader.loadReviews(context, args),
     },
   }),
 });

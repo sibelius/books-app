@@ -5,6 +5,7 @@ declare namespace NodeJS {
     __COUNTERS__: {
       user: 0;
       book: 0;
+      review: 0;
     };
   }
 }

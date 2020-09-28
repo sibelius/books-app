@@ -1,12 +1,9 @@
 ---
 to: packages/<%=package%>/src/<%=dir%>/<%= h.inflection.camelize(name) %>Model.ts
 ---
-import mongoose, { Document, Types, Model } from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 
-import {
-  isActiveMongooseField,
-  removedAtMongooseField,
-} from '../../core/mongoose/withMongooseFields';
+import { isActiveMongooseField, removedAtMongooseField } from '../../core/mongoose/withMongooseFields';
 
 const Schema = new mongoose.Schema(
   {

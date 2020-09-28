@@ -33,6 +33,9 @@ type Book implements Node {
   """The book language. ex: Portuguese"""
   language: String
 
+  """The book average rating based on user reviews"""
+  rating: Float
+
   """The soft delete status."""
   isActive: Boolean
 
@@ -174,8 +177,106 @@ type Query {
   me: User
   status: Status
 
-  """Connection to all me books"""
+  """Connection to all books"""
   books(after: String, first: Int, before: String, last: Int, filters: BookFilters): BookConnection!
+
+  """Connection to all reviews"""
+  reviews(after: String, first: Int, before: String, last: Int, filters: ReviewFilters): ReviewConnection!
+}
+
+"""Represents a Review"""
+type Review implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """MongoDB _id"""
+  _id: String!
+
+  """The user who created this review."""
+  user: User
+
+  """The book rated on this review."""
+  book: Book
+
+  """The rating of the review. ex: 4.5"""
+  rating: Float
+
+  """The review description. ex: This book is awesome"""
+  description: String
+
+  """The soft delete status."""
+  isActive: Boolean
+
+  """The hard delete status."""
+  removedAt: String
+
+  """The date that the node was created."""
+  createdAt: String
+
+  """The date that the node was last updated."""
+  updatedAt: String
+}
+
+"""A connection to a list of items."""
+type ReviewConnection {
+  """Number of items in this connection"""
+  count: Int!
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+    This allows a client to fetch the first five objects by passing "5" as the
+    argument to "first", then fetch the total count so it could display "5 of 83",
+    for example.
+  """
+  totalCount: Int!
+
+  """Offset from start"""
+  startCursorOffset: Int!
+
+  """Offset till end"""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfoExtended!
+
+  """A list of edges."""
+  edges: [ReviewEdge]!
+}
+
+"""An edge in a connection."""
+type ReviewEdge {
+  """The item at the end of the edge"""
+  node: Review!
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Used to filter reviews"""
+input ReviewFilters {
+  OR: [ReviewFilters]
+  AND: [ReviewFilters]
+
+  """[{ direction: 'ASC', sort: 'CREATED_AT' }]"""
+  orderBy: [ReviewOrdering!]
+
+  """Filter by book."""
+  book: ID
+
+  """Filter by user."""
+  user: ID
+}
+
+"""Used to order reviews"""
+input ReviewOrdering {
+  sort: ReviewSortEnumType!
+  direction: DirectionEnum!
+}
+
+enum ReviewSortEnumType {
+  """The rating of the review. ex: 4.5"""
+  RATING
+  CREATED_AT
 }
 
 """Status"""

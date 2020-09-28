@@ -32,7 +32,17 @@ export default class <%= h.inflection.camelize(name) %> {
 
 export const getLoader = () => new DataLoader(ids => mongooseLoader(<%= h.inflection.camelize(name) %>Model, ids));
 
-const viewerCanSee = (context: GraphQLContext, data: I<%= h.inflection.camelize(name) %>) => !!context.user;
+const viewerCanSee = (context: GraphQLContext, data: I<%= h.inflection.camelize(name) %>) => {
+  if (!context.user) {
+    return false;
+  }
+
+  if (!data.isActive || data.removedAt) {
+    return false;
+  }
+
+  return true;
+}
 
 export const load = async (context: GraphQLContext, id: DataLoaderKey) => {
   if (!id) return null;
@@ -58,7 +68,7 @@ export const primeCache = ({ dataloaders }: GraphQLContext, id: string, data: I<
 export const clearAndPrimeCache = (context: GraphQLContext, id: string, data: I<%= h.inflection.camelize(name) %>) =>
   clearCache(context, id) && primeCache(context, id, data);
 
-export const load<%= h.inflection.camelize(name) %> = async (context: GraphQLContext, args: ConnectionArguments) => {
+export const load<%= h.inflection.camelize(name) %>s = async (context: GraphQLContext, args: ConnectionArguments) => {
   // @TODO: specify conditions
   const <%= name %> = <%= h.inflection.camelize(name) %>Model.find({});
 
