@@ -5,8 +5,8 @@
   "module": "src/index.ts",
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.0",
-    "react-relay": "^0.0.0-experimental-183bdd28",
-    "relay-runtime": "^10.0.1"
+    "react-relay": "0.0.0-experimental-8cc94ddc",
+    "relay-runtime": "9.0.0"
   },
   "devDependencies": {
     "@booksapp/types": "^0.0.1"
