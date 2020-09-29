@@ -2,7 +2,7 @@ import DataLoader from 'dataloader';
 import { Types } from 'mongoose';
 import { Context } from 'koa';
 
-import { IUser, ISessionToken, IBook, IReview, ICategory } from './models';
+import { IUser, ISessionToken, IBook, IReview, ICategory, IReadBook } from './models';
 
 import { User } from './loader';
 
@@ -18,6 +18,7 @@ export interface GraphQLDataloaders {
   BookLoader: DataLoader<DataLoaderKey, IBook>;
   ReviewLoader: DataLoader<DataLoaderKey, IReview>;
   CategoryLoader: DataLoader<DataLoaderKey, ICategory>;
+  ReadBookLoader: DataLoader<DataLoaderKey, IReadBook>;
 }
 
 export interface GraphQLContext {
