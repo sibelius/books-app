@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReadBookModel should create new read book using ReadBookModel 1`] = `
+Object {
+  "__v": 0,
+  "_id": "ObjectId",
+  "bookId": "ObjectId",
+  "createdAt": "FROZEN-CREATEDAT",
+  "isActive": true,
+  "readPages": 5,
+  "removedAt": "EMPTY",
+  "updatedAt": "FROZEN-UPDATEDAT",
+  "userId": "ObjectId",
+}
+`;

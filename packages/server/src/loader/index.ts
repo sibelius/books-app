@@ -3,6 +3,7 @@ import SessionToken, * as SessionTokenLoader from '../modules/sessionToken/Sessi
 import Book, * as BookLoader from '../modules/book/BookLoader';
 import Review, * as ReviewLoader from '../modules/review/ReviewLoader';
 import Category, * as CategoryLoader from '../modules/category/CategoryLoader';
+import ReadBook, * as ReadBookLoader from '../modules/readBook/ReadBookLoader';
 
 export {
   User,
@@ -15,4 +16,6 @@ export {
   ReviewLoader,
   Category,
   CategoryLoader,
+  ReadBook,
+  ReadBookLoader,
 };

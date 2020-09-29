@@ -8,7 +8,7 @@ export type CreatedAtOrdering = {
   direction: typeof DIRECTION;
 };
 
-const CreatedAtOrdering = new GraphQLInputObjectType({
+const CreatedAtOrderingInputType = new GraphQLInputObjectType({
   name: 'CreatedAtOrdering',
   description: 'Used to order by creation date',
   fields: () => ({
@@ -21,4 +21,4 @@ const CreatedAtOrdering = new GraphQLInputObjectType({
   }),
 });
 
-export default CreatedAtOrdering;
+export default CreatedAtOrderingInputType;

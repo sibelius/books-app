@@ -13,7 +13,7 @@ export default class User {
   public registeredType = 'User';
 
   id: string;
-  _id: string;
+  _id: Types.ObjectId;
   name: string;
   surname: string;
   password?: string;

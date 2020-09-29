@@ -266,6 +266,83 @@ type Query {
 
   """Connection to all categories"""
   categories(after: String, first: Int, before: String, last: Int, filters: CategoryFilters): CategoryConnection!
+
+  """Connection to all me read books"""
+  readBooks(after: String, first: Int, before: String, last: Int, filters: ReadBookFilters): ReadBookConnection!
+}
+
+"""Represents a ReadBook"""
+type ReadBook implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """MongoDB _id"""
+  _id: String!
+
+  """The book being read."""
+  book: Book
+
+  """The total read pages. ex: 50"""
+  readPages: Int
+
+  """The soft delete status."""
+  isActive: Boolean
+
+  """The hard delete status."""
+  removedAt: String
+
+  """The date that the node was created."""
+  createdAt: String
+
+  """The date that the node was last updated."""
+  updatedAt: String
+}
+
+"""A connection to a list of items."""
+type ReadBookConnection {
+  """Number of items in this connection"""
+  count: Int!
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+    This allows a client to fetch the first five objects by passing "5" as the
+    argument to "first", then fetch the total count so it could display "5 of 83",
+    for example.
+  """
+  totalCount: Int!
+
+  """Offset from start"""
+  startCursorOffset: Int!
+
+  """Offset till end"""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfoExtended!
+
+  """A list of edges."""
+  edges: [ReadBookEdge]!
+}
+
+"""An edge in a connection."""
+type ReadBookEdge {
+  """The item at the end of the edge"""
+  node: ReadBook!
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Used to filter read books"""
+input ReadBookFilters {
+  OR: [ReadBookFilters]
+  AND: [ReadBookFilters]
+
+  """[{ direction: 'ASC', sort: 'CREATED_AT' }]"""
+  orderBy: [CreatedAtOrdering!]
+
+  """Filter by book finished status."""
+  finished: Boolean
 }
 
 """Represents a Review"""
