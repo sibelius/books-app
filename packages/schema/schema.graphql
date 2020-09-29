@@ -214,6 +214,9 @@ type Mutation {
   ReviewAdd(input: ReviewAddInput!): ReviewAddPayload
   ReviewEdit(input: ReviewEditInput!): ReviewEditPayload
   ReviewRemove(input: ReviewRemoveInput!): ReviewRemovePayload
+  ReadBookAdd(input: ReadBookAddInput!): ReadBookAddPayload
+  ReadBookEditPage(input: ReadBookEditPageInput!): ReadBookEditPagePayload
+  ReadBookRemove(input: ReadBookRemoveInput!): ReadBookRemovePayload
 }
 
 """An object with an ID"""
@@ -298,6 +301,20 @@ type ReadBook implements Node {
   updatedAt: String
 }
 
+input ReadBookAddInput {
+  """The book being read global id."""
+  bookId: ID!
+  clientMutationId: String
+}
+
+type ReadBookAddPayload {
+  readBookEdge: ReadBookEdge
+
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
+}
+
 """A connection to a list of items."""
 type ReadBookConnection {
   """Number of items in this connection"""
@@ -333,6 +350,23 @@ type ReadBookEdge {
   cursor: String!
 }
 
+input ReadBookEditPageInput {
+  """The global ReadBook id."""
+  id: ID!
+
+  """The current user page. ex: 2"""
+  currentPage: Int
+  clientMutationId: String
+}
+
+type ReadBookEditPagePayload {
+  readBookEdge: ReadBookEdge
+
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
+}
+
 """Used to filter read books"""
 input ReadBookFilters {
   OR: [ReadBookFilters]
@@ -343,6 +377,21 @@ input ReadBookFilters {
 
   """Filter by book finished status."""
   finished: Boolean
+}
+
+input ReadBookRemoveInput {
+  """The global ReadBook id."""
+  id: ID!
+  clientMutationId: String
+}
+
+type ReadBookRemovePayload {
+  """Default success field resolver for mutations"""
+  success: String
+
+  """Default error field resolver for mutations"""
+  error: String
+  clientMutationId: String
 }
 
 """Represents a Review"""
