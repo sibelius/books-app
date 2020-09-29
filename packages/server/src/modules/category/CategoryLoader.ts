@@ -4,43 +4,28 @@ import { ConnectionArguments } from 'graphql-relay';
 import { Types } from 'mongoose';
 
 import { GraphQLContext, DataLoaderKey } from '../../types';
-
 import { NullConnection } from '../../graphql/connection/NullConnection';
 
 import { buildMongoConditionsFromFilters } from '../../core/graphql/graphqlFilters';
 
-import BookModel, { IBook } from './BookModel';
-import { BookArgFilters, bookFilterMapping } from './filters/BookFiltersInputType';
+import CategoryModel, { ICategory } from './CategoryModel';
+import { CategoriesArgFilters, categoryFilterMapping } from './filters/CategoryFiltersInputType';
 
-export default class Book {
-  public registeredType = 'Book';
+export default class Category {
+  public registeredType = 'Category';
 
   id: string;
   _id: Types.ObjectId;
   name: string;
-  author: string;
-  description: string;
-  releaseYear: number;
-  pages: number;
-  bannerUrl: string;
-  ISBN?: number;
-  language?: string;
   isActive: boolean;
   removedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 
-  constructor(data: IBook) {
+  constructor(data: ICategory) {
     this.id = data.id || data._id;
     this._id = data._id;
     this.name = data.name;
-    this.author = data.author;
-    this.description = data.description;
-    this.releaseYear = data.releaseYear;
-    this.pages = data.pages;
-    this.bannerUrl = data.bannerUrl;
-    this.ISBN = data.ISBN;
-    this.language = data.language;
     this.isActive = data.isActive;
     this.removedAt = data.removedAt;
     this.createdAt = data.createdAt;
@@ -48,9 +33,9 @@ export default class Book {
   }
 }
 
-export const getLoader = () => new DataLoader((ids) => mongooseLoader(BookModel, ids));
+export const getLoader = () => new DataLoader((ids) => mongooseLoader(CategoryModel, ids));
 
-const viewerCanSee = (context: GraphQLContext, data: IBook) => {
+const viewerCanSee = (context: GraphQLContext, data: ICategory) => {
   if (!context.user) {
     return false;
   }
@@ -66,34 +51,36 @@ export const load = async (context: GraphQLContext, id: DataLoaderKey) => {
   if (!id) return null;
 
   try {
-    const data = await context.dataloaders.BookLoader.load(id);
+    const data = await context.dataloaders.CategoryLoader.load(id);
 
     if (!data) return null;
 
-    return viewerCanSee(context, data) ? new Book(data) : null;
+    return viewerCanSee(context, data) ? new Category(data) : null;
   } catch (err) {
     return null;
   }
 };
 
-export const clearCache = ({ dataloaders }: GraphQLContext, id: string) => dataloaders.BookLoader.clear(id.toString());
+export const clearCache = ({ dataloaders }: GraphQLContext, id: string) =>
+  dataloaders.CategoryLoader.clear(id.toString());
 
-export const primeCache = ({ dataloaders }: GraphQLContext, id: string, data: IBook) =>
-  dataloaders.BookLoader?.prime(id.toString(), data);
+export const primeCache = ({ dataloaders }: GraphQLContext, id: string, data: ICategory) =>
+  dataloaders.CategoryLoader?.prime(id.toString(), data);
 
-export const clearAndPrimeCache = (context: GraphQLContext, id: string, data: IBook) =>
+export const clearAndPrimeCache = (context: GraphQLContext, id: string, data: ICategory) =>
   clearCache(context, id) && primeCache(context, id, data);
 
-interface IloadBooksArgs extends ConnectionArguments {
-  filters?: BookArgFilters;
+interface LoadCategoriesArgs extends ConnectionArguments {
+  filters?: CategoriesArgFilters;
 }
-export const loadBooks = async (context: GraphQLContext, args: IloadBooksArgs) => {
+export const loadCategories = async (context: GraphQLContext, args: LoadCategoriesArgs) => {
   const { user } = context;
-  const { filters = {} } = args;
 
   if (!user) {
     return NullConnection;
   }
+
+  const { filters = {} } = args;
 
   const defaultFilters = { orderBy: [{ sort: 'createdAt', direction: -1 }] };
   const defaultConditions = {};
@@ -101,7 +88,7 @@ export const loadBooks = async (context: GraphQLContext, args: IloadBooksArgs) =
   const builtMongoConditions = buildMongoConditionsFromFilters(
     context,
     { ...defaultFilters, ...filters },
-    bookFilterMapping,
+    categoryFilterMapping,
   );
 
   const conditions = {
@@ -111,7 +98,7 @@ export const loadBooks = async (context: GraphQLContext, args: IloadBooksArgs) =
 
   const aggregatePipeline = [{ $match: conditions }, ...builtMongoConditions.pipeline];
 
-  const aggregate = BookModel.aggregate(aggregatePipeline);
+  const aggregate = CategoryModel.aggregate(aggregatePipeline);
 
   return connectionFromMongoAggregate({
     aggregate,

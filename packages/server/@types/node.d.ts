@@ -3,9 +3,10 @@ declare namespace NodeJS {
     __MONGO_URI__: string;
     __MONGO_DB_NAME__: string;
     __COUNTERS__: {
-      user: 0;
-      book: 0;
-      review: 0;
+      user: number;
+      book: number;
+      review: number;
+      category: number;
     };
   }
 }

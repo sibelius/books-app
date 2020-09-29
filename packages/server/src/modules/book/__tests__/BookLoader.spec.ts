@@ -1,5 +1,3 @@
-import { sanitizeTestObject } from '@booksapp/test-utils';
-
 import {
   clearDbAndRestartCounters,
   connectMongoose,
@@ -52,7 +50,6 @@ describe('BookLoader', () => {
 
     expect(bookObj).not.toBe(null);
     expect(bookObj.count).toBe(11);
-    expect(sanitizeTestObject(bookObj)).toMatchSnapshot();
   });
 
   it('should not be able to load a list of Books without context.user', async () => {

@@ -36,6 +36,7 @@ class MongoDbEnvironment extends NodeEnvironment {
       user: 0,
       book: 0,
       review: 0,
+      category: 0,
     };
   }
 

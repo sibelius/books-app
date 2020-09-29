@@ -53,11 +53,6 @@ const BookTypeConfig: ConfigType = {
       description: 'The book total page. ex: 96',
       resolve: (obj) => obj.pages,
     },
-    price: {
-      type: GraphQLFloat,
-      description: 'The book price. ex: 20',
-      resolve: (obj) => obj.price,
-    },
     bannerUrl: {
       type: GraphQLString,
       description: 'The book banner url.',

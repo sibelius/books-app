@@ -21,9 +21,6 @@ type Book implements Node {
   """The book total page. ex: 96"""
   pages: Int
 
-  """The book price. ex: 20"""
-  price: Float
-
   """The book banner url."""
   bannerUrl: String
 
@@ -106,6 +103,84 @@ enum BookSortEnumType {
   CREATED_AT
 }
 
+"""Represents a Category"""
+type Category implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The category name. ex: Horror"""
+  name: String
+
+  """MongoDB _id"""
+  _id: String!
+
+  """The soft delete status."""
+  isActive: Boolean
+
+  """The hard delete status."""
+  removedAt: String
+
+  """The date that the node was created."""
+  createdAt: String
+
+  """The date that the node was last updated."""
+  updatedAt: String
+}
+
+"""A connection to a list of items."""
+type CategoryConnection {
+  """Number of items in this connection"""
+  count: Int!
+
+  """
+  A count of the total number of objects in this connection, ignoring pagination.
+    This allows a client to fetch the first five objects by passing "5" as the
+    argument to "first", then fetch the total count so it could display "5 of 83",
+    for example.
+  """
+  totalCount: Int!
+
+  """Offset from start"""
+  startCursorOffset: Int!
+
+  """Offset till end"""
+  endCursorOffset: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfoExtended!
+
+  """A list of edges."""
+  edges: [CategoryEdge]!
+}
+
+"""An edge in a connection."""
+type CategoryEdge {
+  """The item at the end of the edge"""
+  node: Category!
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Used to filter categories"""
+input CategoryFilters {
+  OR: [CategoryFilters]
+  AND: [CategoryFilters]
+
+  """[{ direction: 'ASC', sort: 'CREATED_AT' }]"""
+  orderBy: [CreatedAtOrdering!]
+}
+
+"""Used to order by creation date"""
+input CreatedAtOrdering {
+  sort: CreatedAtSortEnumType!
+  direction: DirectionEnum!
+}
+
+enum CreatedAtSortEnumType {
+  CREATED_AT
+}
+
 enum DirectionEnum {
   ASC
   DESC
@@ -185,6 +260,9 @@ type Query {
 
   """Connection to all reviews"""
   reviews(after: String, first: Int, before: String, last: Int, filters: ReviewFilters): ReviewConnection!
+
+  """Connection to all categories"""
+  categories(after: String, first: Int, before: String, last: Int, filters: CategoryFilters): CategoryConnection!
 }
 
 """Represents a Review"""

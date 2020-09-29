@@ -29,11 +29,6 @@ const Schema = new mongoose.Schema(
       description: 'The book total page. ex: 96',
       required: true,
     },
-    price: {
-      type: Number,
-      description: 'The book price. ex: 20',
-      required: true,
-    },
     bannerUrl: {
       type: String,
       description: 'The book banner url.',
@@ -68,7 +63,6 @@ export interface IBook extends Document {
   description: string;
   releaseYear: number;
   pages: number;
-  price: number;
   bannerUrl: string;
   ISBN?: number;
   language?: string;
