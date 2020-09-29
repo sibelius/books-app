@@ -1,9 +1,5 @@
 import DataLoader from 'dataloader';
-import {
-  connectionFromMongoAggregate,
-  connectionFromMongoCursor,
-  mongooseLoader,
-} from '@entria/graphql-mongoose-loader';
+import { connectionFromMongoAggregate, mongooseLoader } from '@entria/graphql-mongoose-loader';
 import { ConnectionArguments } from 'graphql-relay';
 import { Types } from 'mongoose';
 

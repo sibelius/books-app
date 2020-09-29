@@ -14,7 +14,7 @@ describe('BookModel', () => {
     const author = 'Machado de Assis';
     const description = 'This is a book created by Machado de Assis';
     const pages = 86;
-    const price = 20;
+
     const bannerUrl = 'https://storage.googleapis.com/machadoDeAssis';
 
     const book = await new BookModel({
@@ -22,7 +22,6 @@ describe('BookModel', () => {
       author,
       description,
       pages,
-      price,
       bannerUrl,
     }).save();
 
@@ -32,7 +31,6 @@ describe('BookModel', () => {
     expect(bookObj?.author).toBe(author);
     expect(bookObj?.description).toBe(description);
     expect(bookObj?.pages).toBe(pages);
-    expect(bookObj?.price).toBe(price);
     expect(bookObj?.bannerUrl).toBe(bannerUrl);
   });
 
@@ -45,7 +43,6 @@ describe('BookModel', () => {
     expect(bookObj?.author).toBe('author 1');
     expect(bookObj?.description).toBe('description 1');
     expect(bookObj?.pages).toBe(10);
-    expect(bookObj?.price).toBe(5);
     expect(bookObj?.bannerUrl).toBe('bannerUrl 1');
   });
 

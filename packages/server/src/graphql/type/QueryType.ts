@@ -4,7 +4,7 @@ import { globalIdField, connectionArgs } from 'graphql-relay';
 import { NodeField, NodesField } from '../../interface/NodeInterface';
 import { GraphQLContext } from '../../types';
 
-import { UserLoader, BookLoader, ReviewLoader } from '../../loader';
+import { UserLoader, BookLoader, ReviewLoader, CategoryLoader } from '../../loader';
 
 import UserType from '../../modules/user/UserType';
 
@@ -13,6 +13,9 @@ import BookFiltersInputType from '../../modules/book/filters/BookFiltersInputTyp
 
 import { ReviewConnection } from '../../modules/review/ReviewType';
 import ReviewFiltersInputType from '../../modules/review/filters/ReviewFiltersInputType';
+
+import { CategoryConnection } from '../../modules/category/CategoryType';
+import CategoryFiltersInputType from '../../modules/category/filters/CategoryFiltersInputType';
 
 import StatusType from './StatusType';
 
@@ -55,6 +58,18 @@ export default new GraphQLObjectType<any, GraphQLContext, any>({
         },
       },
       resolve: (obj, args, context) => ReviewLoader.loadReviews(context, args),
+    },
+
+    categories: {
+      type: GraphQLNonNull(CategoryConnection.connectionType),
+      description: 'Connection to all categories',
+      args: {
+        ...connectionArgs,
+        filters: {
+          type: CategoryFiltersInputType,
+        },
+      },
+      resolve: (obj, args, context) => CategoryLoader.loadCategories(context, args),
     },
   }),
 });

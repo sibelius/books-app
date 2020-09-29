@@ -15,6 +15,7 @@ import {
   createBook,
   resetRunningDate,
   gql,
+  createCategory,
 } from '../../../../test/helpers';
 
 beforeAll(connectMongoose);
@@ -87,7 +88,7 @@ describe('Book queries', () => {
     expect(result.data?.book).toBe(null);
   });
 
-  it('should get null Book if isActive is false', async () => {
+  it('should get null book if isActive is false', async () => {
     const user = await createUser();
     const event = await createBook({ isActive: false });
 
@@ -116,7 +117,7 @@ describe('Book queries', () => {
     expect(result.data?.book).toBe(null);
   });
 
-  it('should get null Book if removedAt exists', async () => {
+  it('should get null book if removedAt exists', async () => {
     const user = await createUser();
     const event = await createBook({ removedAt: new Date() });
 
@@ -257,6 +258,51 @@ describe('Book queries', () => {
     expect(result.data?.books.edges[0].node.name).toBe(book1.name);
     expect(result.data?.books.edges[1].node.name).toBe(book2.name);
     expect(result.data?.books.edges[2].node.name).toBe(book3.name);
+    expect(sanitizeTestObject(result.data)).toMatchSnapshot();
+  });
+
+  it('should query a connection of books with category filter', async () => {
+    const user = await createUser();
+
+    const horrorCategory = await createCategory({ name: 'Horror' });
+    for (let i = 0; i < 5; i++) {
+      await createBook({ categoryId: horrorCategory._id });
+    }
+
+    const comedyCategory = await createCategory({ name: 'Comedy' });
+    for (let i = 0; i < 10; i++) {
+      await createBook({ categoryId: comedyCategory._id });
+    }
+
+    const query = gql`
+      query Q($filters: BookFilters) {
+        books(filters: $filters) {
+          count
+          edges {
+            node {
+              id
+              name
+              author
+              description
+            }
+          }
+        }
+      }
+    `;
+
+    const rootValue = {};
+    const context = await getContext({ user });
+    const variables = {
+      filters: {
+        category: toGlobalId('Category', horrorCategory._id),
+      },
+    };
+
+    const result = await graphql(schema, query, rootValue, context, variables);
+
+    expect(result.errors).toBeUndefined();
+    expect(result.data?.books).not.toBe(null);
+    expect(result.data?.books.edges.length).toBe(5);
     expect(sanitizeTestObject(result.data)).toMatchSnapshot();
   });
 });

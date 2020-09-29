@@ -10,6 +10,8 @@ import {
   IBook,
   Review,
   IReview,
+  Category,
+  ICategory,
 } from '../../src/models';
 
 import { getObjectId, PLATFORM } from '../../src/common/utils';
@@ -41,7 +43,7 @@ export const createSessionToken = async (args: DeepPartial<ISessionToken> = {}) 
 };
 
 export const createBook = async (args: DeepPartial<IBook> = {}) => {
-  const { name, author, description, pages, price, bannerUrl, ...rest } = args;
+  const { name, author, description, pages, bannerUrl, ...rest } = args;
 
   const n = (global.__COUNTERS__.book += 1);
 
@@ -50,7 +52,6 @@ export const createBook = async (args: DeepPartial<IBook> = {}) => {
     author: author || `author ${n}`,
     description: description || `description ${n}`,
     pages: pages || n * 10,
-    price: price || n * 5,
     bannerUrl: bannerUrl || `bannerUrl ${n}`,
     ...rest,
   }).save();
@@ -75,6 +76,17 @@ export const createReview = async (args: DeepPartial<IReview> = {}) => {
     userId: getObjectId(userId || userObj),
     bookId: getObjectId(bookId || bookObj),
     rating: rating || n,
+    ...rest,
+  }).save();
+};
+
+export const createCategory = async (args: DeepPartial<ICategory> = {}) => {
+  const { name, ...rest } = args;
+
+  const n = (global.__COUNTERS__.category += 1);
+
+  return new Category({
+    name: name || `category ${n}`,
     ...rest,
   }).save();
 };
