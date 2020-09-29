@@ -81,7 +81,7 @@ type BookEdge {
   cursor: String!
 }
 
-"""Used to filter book"""
+"""Used to filter books"""
 input BookFilters {
   OR: [BookFilters]
   AND: [BookFilters]
@@ -91,6 +91,9 @@ input BookFilters {
 
   """Filter by search string. Name, author or description."""
   search: String
+
+  """Filter by category."""
+  category: ID
 }
 
 """Used to order books"""

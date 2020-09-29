@@ -10,7 +10,7 @@ import { NullConnection } from '../../graphql/connection/NullConnection';
 import { buildMongoConditionsFromFilters } from '../../core/graphql/graphqlFilters';
 
 import BookModel, { IBook } from './BookModel';
-import { BookArgFilters, bookFilterMapping } from './filters/BookFiltersInputType';
+import { BooksArgFilters, bookFilterMapping } from './filters/BookFiltersInputType';
 
 export default class Book {
   public registeredType = 'Book';
@@ -25,6 +25,7 @@ export default class Book {
   bannerUrl: string;
   ISBN?: number;
   language?: string;
+  categoryId: Types.ObjectId;
   isActive: boolean;
   removedAt: Date | null;
   createdAt: Date;
@@ -41,6 +42,7 @@ export default class Book {
     this.bannerUrl = data.bannerUrl;
     this.ISBN = data.ISBN;
     this.language = data.language;
+    this.categoryId = data.categoryId;
     this.isActive = data.isActive;
     this.removedAt = data.removedAt;
     this.createdAt = data.createdAt;
@@ -85,7 +87,7 @@ export const clearAndPrimeCache = (context: GraphQLContext, id: string, data: IB
   clearCache(context, id) && primeCache(context, id, data);
 
 interface IloadBooksArgs extends ConnectionArguments {
-  filters?: BookArgFilters;
+  filters?: BooksArgFilters;
 }
 export const loadBooks = async (context: GraphQLContext, args: IloadBooksArgs) => {
   const { user } = context;

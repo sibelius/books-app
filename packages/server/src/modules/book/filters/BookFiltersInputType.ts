@@ -1,14 +1,15 @@
-import { GraphQLInputObjectType, GraphQLList, GraphQLString, GraphQLNonNull } from 'graphql';
+import { GraphQLInputObjectType, GraphQLList, GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
 
 import { FILTER_CONDITION_TYPE, FilterMapping, buildSortFromOrderByArg } from '../../../core/graphql/graphqlFilters';
-import { escapeRegex } from '../../../common/utils';
-import { GraphQLArgFilter } from '../../../types';
+import { escapeRegex, getObjectId } from '../../../common/utils';
+import { GraphQLArgFilter, ObjectId } from '../../../types';
 
 import BookOrderingInputType, { BookOrdering } from './BookOrderingInputType';
 
-export type BookArgFilters = GraphQLArgFilter<{
+export type BooksArgFilters = GraphQLArgFilter<{
   orderBy?: Array<{ sort: string; direction: string }>;
   search?: string;
+  category: ObjectId;
 }>;
 
 export const bookFilterMapping: FilterMapping = {
@@ -34,11 +35,16 @@ export const bookFilterMapping: FilterMapping = {
       };
     },
   },
+  category: {
+    type: FILTER_CONDITION_TYPE.MATCH_1_TO_1,
+    key: 'categoryId',
+    format: (category: string) => getObjectId(category),
+  },
 };
 
 const BookFiltersInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
   name: 'BookFilters',
-  description: 'Used to filter book',
+  description: 'Used to filter books',
   fields: () => ({
     OR: {
       type: GraphQLList(BookFiltersInputType),
@@ -53,6 +59,10 @@ const BookFiltersInputType: GraphQLInputObjectType = new GraphQLInputObjectType(
     search: {
       type: GraphQLString,
       description: 'Filter by search string. Name, author or description.',
+    },
+    category: {
+      type: GraphQLID,
+      description: 'Filter by category.',
     },
   }),
 });

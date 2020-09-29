@@ -1,6 +1,8 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document, Model, Types } from 'mongoose';
 
 import { isActiveMongooseField, removedAtMongooseField } from '../../core/mongoose/withMongooseFields';
+
+const { ObjectId } = mongoose.Schema.Types;
 
 const Schema = new mongoose.Schema(
   {
@@ -43,6 +45,12 @@ const Schema = new mongoose.Schema(
       type: String,
       description: 'The book language. ex: Portuguese',
     },
+    categoryId: {
+      type: ObjectId,
+      ref: 'Category',
+      description: 'The book category _id.',
+      //required: true,
+    },
     ...isActiveMongooseField,
     ...removedAtMongooseField,
   },
@@ -66,6 +74,7 @@ export interface IBook extends Document {
   bannerUrl: string;
   ISBN?: number;
   language?: string;
+  categoryId: Types.ObjectId;
   isActive: boolean;
   removedAt: Date | null;
   createdAt: Date;
