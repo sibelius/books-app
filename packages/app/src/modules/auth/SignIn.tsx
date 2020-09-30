@@ -1,13 +1,18 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+import { Button } from '@booksapp/ui';
 
 const SignIn = () => {
   const navigation = useNavigation();
   return (
     <View>
       <Text>Sign in</Text>
-      <Button title="Go to sign up" onPress={() => navigation.navigate('SignUp')} />
+
+      <Button type="gradient" onPress={() => navigation.navigate('SignUp')}>
+        Go to sign up
+      </Button>
     </View>
   );
 };
