@@ -10,46 +10,44 @@ import { useMutation } from '@booksapp/relay';
 
 import useRouterAuth from '../../router/useRouterAuth';
 
-import { UserRegistration } from './mutations/UserRegistrationMutation';
-import { UserRegistrationMutation } from './mutations/__generated__/UserRegistrationMutation.graphql';
+import { UserLogin } from './mutations/UserLoginMutation';
+import { UserLoginMutation } from './mutations/__generated__/UserLoginMutation.graphql';
 
 const containerCss = css`
   padding: 0 24px;
 `;
 
 const Login = () => {
-  const { signUp } = useRouterAuth();
-  const [userRegistration] = useMutation<UserRegistrationMutation>(UserRegistration);
+  const { signIn } = useRouterAuth();
+  const [userLogin] = useMutation<UserLoginMutation>(UserLogin);
 
   const navigation = useNavigation();
 
   const formik = useFormik({
     initialValues: {
-      name: '',
       email: '',
       password: '',
     },
     validationSchema: yup.object().shape({
-      name: yup.string().required('Name is required.'),
       email: yup.string().email('Must be a valid email').required('Email is required.'),
-      password: yup.string().required('Password is required.').min(6, 'Password must be at least 6 characters.'),
+      password: yup.string().required('Password is required.'),
     }),
     onSubmit: (input, { setSubmitting }) => {
-      userRegistration({
+      userLogin({
         variables: { input },
-        onCompleted: ({ UserRegistration }) => {
+        onCompleted: ({ UserLogin }) => {
           setSubmitting(false);
 
-          if (!UserRegistration || UserRegistration.error || !UserRegistration.token) {
-            ToastAndroid.show(UserRegistration?.error || 'Unable to create account', ToastAndroid.SHORT);
+          if (!UserLogin || UserLogin.error || !UserLogin.token) {
+            ToastAndroid.show(UserLogin?.error || 'Unable to login', ToastAndroid.SHORT);
             return;
           }
 
-          signUp(UserRegistration.token);
+          signIn(UserLogin.token);
         },
         onError: (error) => {
           setSubmitting(false);
-          ToastAndroid.show(error?.message || 'Unable to create account', ToastAndroid.SHORT);
+          ToastAndroid.show(error?.message || 'Unable to login', ToastAndroid.SHORT);
         },
       });
     },
@@ -60,12 +58,10 @@ const Login = () => {
   return (
     <Column align="center" justify="center" flex={1} css={containerCss}>
       <Text size="h2" weight="bold" center>
-        Create your account
+        Welcome Back
       </Text>
       <Space height={40} />
       <FormikProvider value={formik}>
-        <FormikInput name="name" label="Name" placeholder="Full name" textContentType="name" />
-        <Space height={10} />
         <FormikInput name="email" label="Email" placeholder="email@example.com" textContentType="emailAddress" />
         <Space height={10} />
         <FormikInput name="password" label="Password" placeholder="Your password" secureTextEntry />
@@ -73,8 +69,8 @@ const Login = () => {
         <FormikButton onPress={() => handleSubmit()}>Submit</FormikButton>
       </FormikProvider>
       <Space height={30} />
-      <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ paddingVertical: 20 }}>
-        <Text>Already have an account? Go back to login</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ paddingVertical: 20 }}>
+        <Text>Don't have an account? Create now</Text>
       </TouchableOpacity>
     </Column>
   );

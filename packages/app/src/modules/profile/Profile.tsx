@@ -1,11 +1,22 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { css } from 'styled-components/native';
+
+import { Button, Column, Space } from '@booksapp/ui';
+
+import useRouterAuth from '../../router/useRouterAuth';
+
+const containerCss = css`
+  padding: 0 24px;
+`;
 
 const Profile = () => {
+  const { signOut } = useRouterAuth();
+
   return (
-    <View>
-      <Text>Profile</Text>
-    </View>
+    <Column align="center" justify="center" flex={1} css={containerCss}>
+      <Space height={20} />
+      <Button onPress={signOut}>Sign out</Button>
+    </Column>
   );
 };
 

@@ -38,8 +38,8 @@ export default class User {
   }
 }
 
-const viewerCanSee = (context: GraphQLContext, data: IUser, isLogin?: boolean) => {
-  if (isLogin || !isLoggedIn(context)) {
+const viewerCanSee = (context: GraphQLContext, data: IUser) => {
+  if (!isLoggedIn(context)) {
     return false;
   }
 
@@ -64,7 +64,7 @@ export const load = async (context: GraphQLContext, id: DataLoaderKey, isLogin?:
       return new User(data, context);
     }
 
-    return viewerCanSee(context, data, isLogin) ? new User(data, context) : null;
+    return viewerCanSee(context, data) ? new User(data, context) : null;
   } catch (err) {
     return null;
   }

@@ -138,7 +138,7 @@ const Button = ({
   if (type === 'gradient') {
     return (
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.gradient]}
+        colors={[theme.colors.primary, theme.colors.accent]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={{ borderRadius: radius ? radiusStyle[radius] : radiusStyle.medium }}

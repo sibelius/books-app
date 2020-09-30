@@ -20,7 +20,6 @@ const Input = styled.TextInput<TextInputProps>`
   border: none;
   color: ${(p) => p.theme.colors.black};
   font-size: 16px;
-  background: none;
   ${(p) => p.css}
 `;
 
