@@ -10,11 +10,9 @@ const EmailSchema = new mongoose.Schema(
       description: 'User email to be used on login',
       trim: true,
       index: true,
-      lowercase: true,
     },
     wasVerified: {
       type: Boolean,
-      default: true,
       description: 'Whether or not this email was verified',
     },
   },
@@ -29,13 +27,11 @@ const Schema = new mongoose.Schema(
       type: String,
       description: 'User name',
       trim: true,
-      index: true,
     },
     surname: {
       type: String,
       description: 'User surname',
       trim: true,
-      index: true,
     },
     password: {
       type: String,
@@ -44,7 +40,6 @@ const Schema = new mongoose.Schema(
     email: {
       type: EmailSchema,
       description: 'E-mail of this user',
-      index: true,
     },
     lang: {
       type: String,

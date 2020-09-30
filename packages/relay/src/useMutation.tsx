@@ -1,29 +1,44 @@
-import React from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useRelayEnvironment } from 'react-relay/hooks';
-import { commitMutation, GraphQLTaggedNode, MutationConfig, MutationParameters } from 'relay-runtime';
 
-const { useState, useRef, useCallback, useEffect } = React;
+import {
+  GraphQLTaggedNode,
+  Disposable,
+  MutationParameters,
+  PayloadError,
+  DeclarativeMutationConfig,
+  SelectorStoreUpdater,
+  UploadableMap,
+  commitMutation,
+} from 'relay-runtime';
 
-type isPending = boolean;
-type ExecuteFn<TMutationParameters extends MutationParameters> = (
-  config: Omit<MutationConfig<TMutationParameters>, 'mutation'>,
-) => void;
+export type UseMutationConfig<TMutation extends MutationParameters> = {
+  configs?: Array<DeclarativeMutationConfig>;
+  onError?: (error: Error) => void | null;
+  onCompleted?: (response: TMutation['response'], errors: Array<PayloadError> | null) => void | null;
+  onUnsubscribe?: () => void | null;
+  optimisticResponse?: any;
+  optimisticUpdater?: SelectorStoreUpdater | null;
+  updater?: SelectorStoreUpdater | null;
+  uploadables?: UploadableMap;
+  variables: TMutation['variables'];
+};
 
-export default function useMutation<TParameters extends MutationParameters>(
+export const useMutation = <TMutation extends MutationParameters>(
   mutation: GraphQLTaggedNode,
-): [isPending, ExecuteFn<TParameters>] {
+): [(config: UseMutationConfig<TMutation>) => Disposable, boolean] => {
   const environment = useRelayEnvironment();
-  const [isPending, setPending] = useState(false);
+  const [isPending, setPending] = useState<boolean>(false);
   const requestRef = useRef(null);
   const mountedRef = useRef(false);
+
   const execute = useCallback(
-    (config = { variables: {} }) => {
+    (config: UseMutationConfig<TMutation> = { variables: {} }) => {
       if (requestRef.current != null) {
         return;
       }
       const request = commitMutation(environment, {
         ...config,
-        // @TODO - add notification here
         onCompleted: (response) => {
           if (!mountedRef.current) {
             return;
@@ -32,10 +47,9 @@ export default function useMutation<TParameters extends MutationParameters>(
           setPending(false);
           config.onCompleted && config.onCompleted(response);
         },
-        // @TODO - add notification here
         onError: (error) => {
-          // eslint-disable-next-line no-console
-          console.log(error);
+          // eslint-disable-next-line
+          console.error(error);
           if (!mountedRef.current) {
             return;
           }
@@ -44,20 +58,19 @@ export default function useMutation<TParameters extends MutationParameters>(
           config.onError && config.onError(error);
         },
         mutation,
-        updater: (store) => {
-          if (typeof config.updater === 'function') {
-            config.updater(store);
-          }
-        },
       });
       requestRef.current = request;
       setPending(true);
     },
     [mutation, environment],
   );
+
   useEffect(() => {
     mountedRef.current = true;
     return () => (mountedRef.current = false);
   }, []);
-  return [isPending, execute];
-}
+
+  return [execute, isPending];
+};
+
+export default useMutation;

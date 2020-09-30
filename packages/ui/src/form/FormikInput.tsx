@@ -12,7 +12,6 @@ const FormikInput = ({ name, ...props }: FormikInputProps) => {
   const [field, meta] = useField(name);
   const { setFieldValue, setFieldTouched } = useFormikContext<any>();
 
-  // @TODO - check if this is still necessary
   const handleChange = (value: string) => {
     if (!touched) {
       setFieldTouched(name, true);
@@ -24,7 +23,7 @@ const FormikInput = ({ name, ...props }: FormikInputProps) => {
 
   const error = useMemo(() => (meta.error && meta.touched ? meta.error : ''), [meta.error, meta.touched]);
 
-  return <TextInput error={error} {...field} {...props} /* onChange={handleChange} */ />;
+  return <TextInput error={error} /* {...field} */ {...props} onChangeText={handleChange} value={field.value} />;
 };
 
 export default FormikInput;

@@ -21,7 +21,7 @@ const AnimatedContainer = styled(Animated.View)`
 interface ColumnProps extends ViewProps {
   justify?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
   align?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
-  flex?: string;
+  flex?: number;
   span?: number;
   children?: React.ReactNode;
   css?: any;

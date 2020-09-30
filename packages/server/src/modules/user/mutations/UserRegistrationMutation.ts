@@ -39,7 +39,7 @@ const mutation = mutationWithClientMutationId({
   mutateAndGetPayload: async (args: UserRegistrationAddArgs, context: LoggedGraphQLContext) => {
     const { t } = context;
 
-    const { name, email, password } = args;
+    const { email, password } = args;
 
     const userEmailExists = await UserLoader.userEmailExists(context, email);
 
@@ -49,8 +49,12 @@ const mutation = mutationWithClientMutationId({
       };
     }
 
+    const name = args.name.split(' ')[0];
+    const surname = args.name.split(' ')[1];
+
     const user = await new UserModel({
       name,
+      surname: surname || '',
       email: { email, wasVerified: true },
       password,
     }).save();

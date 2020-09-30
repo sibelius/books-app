@@ -62,11 +62,16 @@ const Router = () => {
 
   const authContext = useMemo(
     () => ({
-      signIn: async () => {
+      signIn: async (token: string) => {
+        await AsyncStorage.setItem(AUTH_KEY, token);
         dispatch({ type: 'SIGN_IN' });
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
-      signUp: async () => {
+      signOut: async () => {
+        await AsyncStorage.removeItem(AUTH_KEY);
+        dispatch({ type: 'SIGN_OUT' });
+      },
+      signUp: async (token: string) => {
+        await AsyncStorage.setItem(AUTH_KEY, token);
         dispatch({ type: 'SIGN_IN' });
       },
     }),

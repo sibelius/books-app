@@ -20,6 +20,7 @@ module.exports = {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. '@typescript-eslint/explicit-function-return-type': 'off',
     indent: 'off',
+    'react/no-unescaped-entities': 'off',
     '@typescript-eslint/indent': 'off', // conflicts with prettier
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
