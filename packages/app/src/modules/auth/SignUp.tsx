@@ -18,7 +18,7 @@ const containerCss = css`
 `;
 
 const Login = () => {
-  const { signUp } = useRouterAuth();
+  const { signIn } = useRouterAuth();
   const [userRegistration] = useMutation<UserRegistrationMutation>(UserRegistration);
 
   const navigation = useNavigation();
@@ -45,7 +45,7 @@ const Login = () => {
             return;
           }
 
-          signUp(UserRegistration.token);
+          signIn(UserRegistration.token);
         },
         onError: (error) => {
           setSubmitting(false);

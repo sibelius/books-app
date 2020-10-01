@@ -8,6 +8,7 @@ import { getHeaders, getRequestBody, handleData, isMutation } from './helpers';
 import { GRAPHQL_URL } from './config';
 import { clearToken, getToken } from './security';
 import UnavailableServiceError from './UnavailableServiceError';
+import InvalidSessionError from './InvalidSessionError';
 
 export const PLATFORM = {
   APP: 'APP',
@@ -44,8 +45,7 @@ const fetchQuery = async (request: RequestParameters, variables: Variables, uplo
     const clientErrorStatus = [401, 403];
     if (clientErrorStatus.includes(response.status)) {
       await clearToken();
-      // @TODO - dispatch route action to reset routes
-      //window.location.replace('/');
+      //@TODO - refecth me query using ErrorBoundary or dispatch action
       throw data.errors;
     }
 
@@ -64,6 +64,11 @@ const fetchQuery = async (request: RequestParameters, variables: Variables, uplo
 
     const timeoutRegexp = new RegExp(/Still no successful response after/);
     const serverUnavailableRegexp = new RegExp(/Failed to fetch/);
+    const invalidSessionRegexp = new RegExp(/Invalid session/);
+
+    if (Array.isArray(err) && invalidSessionRegexp.test(err[0].message)) {
+      throw new InvalidSessionError('Invalid session.');
+    }
 
     if (timeoutRegexp.test(err.message) || serverUnavailableRegexp.test(err.message)) {
       throw new UnavailableServiceError('Unavailable service. Try again later.');
