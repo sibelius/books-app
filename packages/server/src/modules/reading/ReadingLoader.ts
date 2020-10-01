@@ -8,11 +8,11 @@ import { GraphQLContext, DataLoaderKey } from '../../types';
 import { NullConnection } from '../../graphql/connection/NullConnection';
 import { buildMongoConditionsFromFilters } from '../../core/graphql/graphqlFilters';
 
-import ReadBookModel, { IReadBook } from './ReadBookModel';
-import { ReadBooksArgFilters, readBookFilterMapping } from './filters/ReadBookFiltersInputType';
+import ReadingModel, { IReading } from './ReadingModel';
+import { ReadingsArgFilters, readingFilterMapping } from './filters/ReadingFiltersInputType';
 
-export default class ReadBook {
-  public registeredType = 'ReadBook';
+export default class Reading {
+  public registeredType = 'Reading';
 
   id: string;
   _id: Types.ObjectId;
@@ -24,7 +24,7 @@ export default class ReadBook {
   createdAt: Date;
   updatedAt: Date;
 
-  constructor(data: IReadBook) {
+  constructor(data: IReading) {
     this.id = data.id || data._id;
     this._id = data._id;
     this.userId = data.userId;
@@ -37,9 +37,9 @@ export default class ReadBook {
   }
 }
 
-export const getLoader = () => new DataLoader((ids) => mongooseLoader(ReadBookModel, ids));
+export const getLoader = () => new DataLoader((ids) => mongooseLoader(ReadingModel, ids));
 
-const viewerCanSee = (context: GraphQLContext, data: IReadBook) => {
+const viewerCanSee = (context: GraphQLContext, data: IReading) => {
   if (!context.user || !context.user._id.equals(data.userId)) {
     return false;
   }
@@ -55,29 +55,29 @@ export const load = async (context: GraphQLContext, id: DataLoaderKey) => {
   if (!id) return null;
 
   try {
-    const data = await context.dataloaders.ReadBookLoader.load(id);
+    const data = await context.dataloaders.ReadingLoader.load(id);
 
     if (!data) return null;
 
-    return viewerCanSee(context, data) ? new ReadBook(data) : null;
+    return viewerCanSee(context, data) ? new Reading(data) : null;
   } catch (err) {
     return null;
   }
 };
 
 export const clearCache = ({ dataloaders }: GraphQLContext, id: string) =>
-  dataloaders.ReadBookLoader.clear(id.toString());
+  dataloaders.ReadingLoader.clear(id.toString());
 
-export const primeCache = ({ dataloaders }: GraphQLContext, id: string, data: IReadBook) =>
-  dataloaders.ReadBookLoader?.prime(id.toString(), data);
+export const primeCache = ({ dataloaders }: GraphQLContext, id: string, data: IReading) =>
+  dataloaders.ReadingLoader?.prime(id.toString(), data);
 
-export const clearAndPrimeCache = (context: GraphQLContext, id: string, data: IReadBook) =>
+export const clearAndPrimeCache = (context: GraphQLContext, id: string, data: IReading) =>
   clearCache(context, id) && primeCache(context, id, data);
 
-interface LoadReadBooksArgs extends ConnectionArguments {
-  filters?: ReadBooksArgFilters;
+interface LoadReadingsArgs extends ConnectionArguments {
+  filters?: ReadingsArgFilters;
 }
-export const loadReadBooks = async (context: GraphQLContext, args: LoadReadBooksArgs) => {
+export const loadReadings = async (context: GraphQLContext, args: LoadReadingsArgs) => {
   const { user } = context;
 
   if (!user) {
@@ -92,7 +92,7 @@ export const loadReadBooks = async (context: GraphQLContext, args: LoadReadBooks
   const builtMongoConditions = buildMongoConditionsFromFilters(
     context,
     { ...defaultFilters, ...filters },
-    readBookFilterMapping,
+    readingFilterMapping,
   );
 
   const conditions = {
@@ -102,7 +102,7 @@ export const loadReadBooks = async (context: GraphQLContext, args: LoadReadBooks
 
   const aggregatePipeline = [{ $match: conditions }, ...builtMongoConditions.pipeline];
 
-  const aggregate = ReadBookModel.aggregate(aggregatePipeline);
+  const aggregate = ReadingModel.aggregate(aggregatePipeline);
 
   return connectionFromMongoAggregate({
     aggregate,

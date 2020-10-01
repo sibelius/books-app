@@ -1,29 +1,29 @@
 import { GraphQLNonNull, GraphQLID } from 'graphql';
 import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 
-import ReadBookModel from '../ReadBookModel';
+import ReadingModel from '../ReadingModel';
 
-import * as ReadBookLoader from '../ReadBookLoader';
-import { ReadBookConnection } from '../ReadBookType';
+import * as ReadingLoader from '../ReadingLoader';
+import { ReadingConnection } from '../ReadingType';
 
 import errorField from '../../../core/graphql/errorField';
 import { LoggedGraphQLContext } from '../../../types';
 
 import { BookLoader } from '../../../loader';
 
-type ReadBookAddArgs = {
+type ReadingAddArgs = {
   bookId: string;
 };
 
 const mutation = mutationWithClientMutationId({
-  name: 'ReadBookAdd',
+  name: 'ReadingAdd',
   inputFields: {
     bookId: {
       type: GraphQLNonNull(GraphQLID),
       description: 'The book being read global id.',
     },
   },
-  mutateAndGetPayload: async (args: ReadBookAddArgs, context: LoggedGraphQLContext) => {
+  mutateAndGetPayload: async (args: ReadingAddArgs, context: LoggedGraphQLContext) => {
     const { user, t } = context;
     const { bookId } = args;
 
@@ -33,30 +33,30 @@ const mutation = mutationWithClientMutationId({
       return { error: t('book', 'TheBookIdIsInvalid') };
     }
 
-    const readBook = await new ReadBookModel({
+    const reading = await new ReadingModel({
       userId: user._id,
       bookId: book?._id,
       readPages: 1,
     }).save();
 
     return {
-      id: readBook._id,
+      id: reading._id,
       error: null,
     };
   },
   outputFields: {
-    readBookEdge: {
-      type: ReadBookConnection.edgeType,
+    readingEdge: {
+      type: ReadingConnection.edgeType,
       resolve: async ({ id }, args, context) => {
-        const readBook = await ReadBookLoader.load(context, id);
+        const reading = await ReadingLoader.load(context, id);
 
-        if (!readBook) {
+        if (!reading) {
           return null;
         }
 
         return {
-          cursor: toGlobalId('ReadBook', readBook._id),
-          node: readBook,
+          cursor: toGlobalId('Reading', reading._id),
+          node: reading,
         };
       },
     },

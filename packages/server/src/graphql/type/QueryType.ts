@@ -4,7 +4,7 @@ import { globalIdField, connectionArgs } from 'graphql-relay';
 import { NodeField, NodesField } from '../../interface/NodeInterface';
 import { GraphQLContext } from '../../types';
 
-import { UserLoader, BookLoader, ReviewLoader, CategoryLoader, ReadBookLoader } from '../../loader';
+import { UserLoader, BookLoader, ReviewLoader, CategoryLoader, ReadingLoader } from '../../loader';
 
 import UserType from '../../modules/user/UserType';
 
@@ -17,8 +17,8 @@ import ReviewFiltersInputType from '../../modules/review/filters/ReviewFiltersIn
 import { CategoryConnection } from '../../modules/category/CategoryType';
 import CategoryFiltersInputType from '../../modules/category/filters/CategoryFiltersInputType';
 
-import { ReadBookConnection } from '../../modules/readBook/ReadBookType';
-import ReadBookFiltersInputType from '../../modules/readBook/filters/ReadBookFiltersInputType';
+import { ReadingConnection } from '../../modules/reading/ReadingType';
+import ReadingFiltersInputType from '../../modules/reading/filters/ReadingFiltersInputType';
 
 import StatusType from './StatusType';
 
@@ -75,16 +75,16 @@ export default new GraphQLObjectType<any, GraphQLContext, any>({
       resolve: (obj, args, context) => CategoryLoader.loadCategories(context, args),
     },
 
-    readBooks: {
-      type: GraphQLNonNull(ReadBookConnection.connectionType),
-      description: 'Connection to all me read books',
+    readings: {
+      type: GraphQLNonNull(ReadingConnection.connectionType),
+      description: 'Connection to all me readings',
       args: {
         ...connectionArgs,
         filters: {
-          type: ReadBookFiltersInputType,
+          type: ReadingFiltersInputType,
         },
       },
-      resolve: (obj, args, context) => ReadBookLoader.loadReadBooks(context, args),
+      resolve: (obj, args, context) => ReadingLoader.loadReadings(context, args),
     },
   }),
 });

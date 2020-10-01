@@ -20,15 +20,15 @@ beforeEach(clearDbAndRestartCounters);
 
 afterAll(disconnectMongoose);
 
-describe('ReadBookAddMutation', () => {
-  it('should create a readBook', async () => {
+describe('ReadingAddMutation', () => {
+  it('should create a reading', async () => {
     const user = await createUser();
     const book = await createBook();
 
     const mutation = gql`
-      mutation M($input: ReadBookAddInput!) {
-        ReadBookAdd(input: $input) {
-          readBookEdge {
+      mutation M($input: ReadingAddInput!) {
+        ReadingAdd(input: $input) {
+          readingEdge {
             node {
               id
               readPages
@@ -52,19 +52,19 @@ describe('ReadBookAddMutation', () => {
     const result = await graphql(schema, mutation, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data?.ReadBookAdd.error).toBe(null);
-    expect(result.data?.ReadBookAdd.readBookEdge).not.toBe(null);
-    expect(result.data?.ReadBookAdd.readBookEdge.node.readPages).toBe(1);
-    expect(result.data?.ReadBookAdd.readBookEdge.node.book.name).toBe(book.name);
+    expect(result.data?.ReadingAdd.error).toBe(null);
+    expect(result.data?.ReadingAdd.readingEdge).not.toBe(null);
+    expect(result.data?.ReadingAdd.readingEdge.node.readPages).toBe(1);
+    expect(result.data?.ReadingAdd.readingEdge.node.book.name).toBe(book.name);
   });
 
-  it('should not create a readBook without user', async () => {
+  it('should not create a reading without user', async () => {
     const book = await createBook();
 
     const mutation = gql`
-      mutation M($input: ReadBookAddInput!) {
-        ReadBookAdd(input: $input) {
-          readBookEdge {
+      mutation M($input: ReadingAddInput!) {
+        ReadingAdd(input: $input) {
+          readingEdge {
             node {
               id
               readPages
@@ -88,17 +88,17 @@ describe('ReadBookAddMutation', () => {
     const result = await graphql(schema, mutation, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data?.ReadBookAdd.error).toBe('Unauthorized');
-    expect(result.data?.ReadBookAdd.readBookEdge).toBe(null);
+    expect(result.data?.ReadingAdd.error).toBe('Unauthorized');
+    expect(result.data?.ReadingAdd.readingEdge).toBe(null);
   });
 
-  it('should not create a readBook with invalid book id', async () => {
+  it('should not create a reading with invalid book id', async () => {
     const user = await createUser();
 
     const mutation = gql`
-      mutation M($input: ReadBookAddInput!) {
-        ReadBookAdd(input: $input) {
-          readBookEdge {
+      mutation M($input: ReadingAddInput!) {
+        ReadingAdd(input: $input) {
+          readingEdge {
             node {
               id
               readPages
@@ -122,7 +122,7 @@ describe('ReadBookAddMutation', () => {
     const result = await graphql(schema, mutation, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data?.ReadBookAdd.error).toBe('The book id is invalid.');
-    expect(result.data?.ReadBookAdd.readBookEdge).toBe(null);
+    expect(result.data?.ReadingAdd.error).toBe('The book id is invalid.');
+    expect(result.data?.ReadingAdd.readingEdge).toBe(null);
   });
 });

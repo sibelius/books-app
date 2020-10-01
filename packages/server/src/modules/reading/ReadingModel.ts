@@ -27,7 +27,7 @@ const Schema = new mongoose.Schema(
     ...removedAtMongooseField,
   },
   {
-    collection: 'ReadBook',
+    collection: 'Reading',
     timestamps: {
       createdAt: 'createdAt',
       updatedAt: 'updatedAt',
@@ -35,7 +35,7 @@ const Schema = new mongoose.Schema(
   },
 );
 
-export interface IReadBook extends Document {
+export interface IReading extends Document {
   userId: Types.ObjectId;
   bookId: Types.ObjectId;
   readPages: number;
@@ -45,6 +45,6 @@ export interface IReadBook extends Document {
   updatedAt: Date;
 }
 
-const ReadBookModel: Model<IReadBook> = mongoose.model('ReadBook', Schema);
+const ReadingModel: Model<IReading> = mongoose.model('Reading', Schema);
 
-export default ReadBookModel;
+export default ReadingModel;

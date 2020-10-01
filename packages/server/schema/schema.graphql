@@ -214,9 +214,9 @@ type Mutation {
   ReviewAdd(input: ReviewAddInput!): ReviewAddPayload
   ReviewEdit(input: ReviewEditInput!): ReviewEditPayload
   ReviewRemove(input: ReviewRemoveInput!): ReviewRemovePayload
-  ReadBookAdd(input: ReadBookAddInput!): ReadBookAddPayload
-  ReadBookEditPage(input: ReadBookEditPageInput!): ReadBookEditPagePayload
-  ReadBookRemove(input: ReadBookRemoveInput!): ReadBookRemovePayload
+  ReadingAdd(input: ReadingAddInput!): ReadingAddPayload
+  ReadingEditPage(input: ReadingEditPageInput!): ReadingEditPagePayload
+  ReadingRemove(input: ReadingRemoveInput!): ReadingRemovePayload
 }
 
 """An object with an ID"""
@@ -270,12 +270,12 @@ type Query {
   """Connection to all categories"""
   categories(after: String, first: Int, before: String, last: Int, filters: CategoryFilters): CategoryConnection!
 
-  """Connection to all me read books"""
-  readBooks(after: String, first: Int, before: String, last: Int, filters: ReadBookFilters): ReadBookConnection!
+  """Connection to all me readings"""
+  readings(after: String, first: Int, before: String, last: Int, filters: ReadingFilters): ReadingConnection!
 }
 
-"""Represents a ReadBook"""
-type ReadBook implements Node {
+"""Represents a Reading"""
+type Reading implements Node {
   """The ID of an object"""
   id: ID!
 
@@ -301,14 +301,14 @@ type ReadBook implements Node {
   updatedAt: String
 }
 
-input ReadBookAddInput {
+input ReadingAddInput {
   """The book being read global id."""
   bookId: ID!
   clientMutationId: String
 }
 
-type ReadBookAddPayload {
-  readBookEdge: ReadBookEdge
+type ReadingAddPayload {
+  readingEdge: ReadingEdge
 
   """Default error field resolver for mutations"""
   error: String
@@ -316,7 +316,7 @@ type ReadBookAddPayload {
 }
 
 """A connection to a list of items."""
-type ReadBookConnection {
+type ReadingConnection {
   """Number of items in this connection"""
   count: Int!
 
@@ -338,20 +338,20 @@ type ReadBookConnection {
   pageInfo: PageInfoExtended!
 
   """A list of edges."""
-  edges: [ReadBookEdge]!
+  edges: [ReadingEdge]!
 }
 
 """An edge in a connection."""
-type ReadBookEdge {
+type ReadingEdge {
   """The item at the end of the edge"""
-  node: ReadBook!
+  node: Reading!
 
   """A cursor for use in pagination"""
   cursor: String!
 }
 
-input ReadBookEditPageInput {
-  """The global ReadBook id."""
+input ReadingEditPageInput {
+  """The global Reading id."""
   id: ID!
 
   """The current user page. ex: 2"""
@@ -359,18 +359,18 @@ input ReadBookEditPageInput {
   clientMutationId: String
 }
 
-type ReadBookEditPagePayload {
-  readBookEdge: ReadBookEdge
+type ReadingEditPagePayload {
+  readingEdge: ReadingEdge
 
   """Default error field resolver for mutations"""
   error: String
   clientMutationId: String
 }
 
-"""Used to filter read books"""
-input ReadBookFilters {
-  OR: [ReadBookFilters]
-  AND: [ReadBookFilters]
+"""Used to filter readings"""
+input ReadingFilters {
+  OR: [ReadingFilters]
+  AND: [ReadingFilters]
 
   """[{ direction: 'ASC', sort: 'CREATED_AT' }]"""
   orderBy: [CreatedAtOrdering!]
@@ -379,13 +379,13 @@ input ReadBookFilters {
   finished: Boolean
 }
 
-input ReadBookRemoveInput {
-  """The global ReadBook id."""
+input ReadingRemoveInput {
+  """The global Reading id."""
   id: ID!
   clientMutationId: String
 }
 
-type ReadBookRemovePayload {
+type ReadingRemovePayload {
   """Default success field resolver for mutations"""
   success: String
 
