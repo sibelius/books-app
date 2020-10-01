@@ -12,15 +12,15 @@ import { mongoDocumentStatusResolvers } from '../../core/graphql/mongoDocumentSt
 import BookType from '../book/BookType';
 import { BookLoader } from '../../loader';
 
-import ReadBook from './ReadBookLoader';
+import Reading from './ReadingLoader';
 
-type ConfigType = GraphQLObjectTypeConfig<ReadBook, GraphQLContext>;
+type ConfigType = GraphQLObjectTypeConfig<Reading, GraphQLContext>;
 
-const ReadBookTypeConfig: ConfigType = {
-  name: 'ReadBook',
-  description: 'Represents a ReadBook',
+const ReadingTypeConfig: ConfigType = {
+  name: 'Reading',
+  description: 'Represents a Reading',
   fields: () => ({
-    id: globalIdField('ReadBook'),
+    id: globalIdField('Reading'),
     ...mongooseIdResolver,
     book: {
       type: BookType,
@@ -37,11 +37,11 @@ const ReadBookTypeConfig: ConfigType = {
   interfaces: () => [NodeInterface],
 };
 
-const ReadBookType = registerType(new GraphQLObjectType(ReadBookTypeConfig));
+const ReadingType = registerType(new GraphQLObjectType(ReadingTypeConfig));
 
-export const ReadBookConnection = connectionDefinitions({
-  name: 'ReadBook',
-  nodeType: GraphQLNonNull(ReadBookType),
+export const ReadingConnection = connectionDefinitions({
+  name: 'Reading',
+  nodeType: GraphQLNonNull(ReadingType),
 });
 
-export default ReadBookType;
+export default ReadingType;

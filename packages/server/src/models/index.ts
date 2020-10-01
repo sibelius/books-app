@@ -5,7 +5,7 @@ import SessionToken, { ISessionToken, SESSION_TOKEN_SCOPES } from '../modules/se
 import Book, { IBook } from '../modules/book/BookModel';
 import Review, { IReview } from '../modules/review/ReviewModel';
 import Category, { ICategory } from '../modules/category/CategoryModel';
-import ReadBook, { IReadBook } from '../modules/readBook/ReadBookModel';
+import Reading, { IReading } from '../modules/reading/ReadingModel';
 
 mongoose.Promise = global.Promise;
 
@@ -21,6 +21,6 @@ export {
   IReview,
   Category,
   ICategory,
-  ReadBook,
-  IReadBook,
+  Reading,
+  IReading,
 };

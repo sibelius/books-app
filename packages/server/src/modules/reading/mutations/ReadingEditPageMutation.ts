@@ -1,44 +1,44 @@
 import { GraphQLNonNull, GraphQLID, GraphQLInt } from 'graphql';
 import { fromGlobalId, mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 
-import ReadBookModel from '../ReadBookModel';
+import ReadingModel from '../ReadingModel';
 
-import * as ReadBookLoader from '../ReadBookLoader';
-import { ReadBookConnection } from '../ReadBookType';
+import * as ReadingLoader from '../ReadingLoader';
+import { ReadingConnection } from '../ReadingType';
 
 import errorField from '../../../core/graphql/errorField';
 import { LoggedGraphQLContext } from '../../../types';
-import { ReadBook } from '../../../models';
+import { Reading } from '../../../models';
 import { BookLoader } from '../../../loader';
 
-type ReadBookEditPageArgs = {
+type ReadingEditPageArgs = {
   id: string;
   currentPage: number;
 };
 
 const mutation = mutationWithClientMutationId({
-  name: 'ReadBookEditPage',
+  name: 'ReadingEditPage',
   inputFields: {
     id: {
       type: GraphQLNonNull(GraphQLID),
-      description: 'The global ReadBook id.',
+      description: 'The global Reading id.',
     },
     currentPage: {
       type: GraphQLInt,
       description: 'The current user page. ex: 2',
     },
   },
-  mutateAndGetPayload: async (args: ReadBookEditPageArgs, context: LoggedGraphQLContext) => {
+  mutateAndGetPayload: async (args: ReadingEditPageArgs, context: LoggedGraphQLContext) => {
     const { user, t } = context;
     const { id, currentPage } = args;
 
-    const readBook = await ReadBook.findOne({ _id: fromGlobalId(id).id, userId: user._id });
+    const reading = await Reading.findOne({ _id: fromGlobalId(id).id, userId: user._id });
 
-    if (!readBook) {
+    if (!reading) {
       return { error: t('book', 'BookNotFound') };
     }
 
-    const book = await BookLoader.load(context, readBook.bookId);
+    const book = await BookLoader.load(context, reading.bookId);
 
     if (!book) {
       return { error: t('book', 'BookNotFound') };
@@ -48,31 +48,31 @@ const mutation = mutationWithClientMutationId({
       return { error: t('book', 'CurrentPageShouldNotBeLargerThan') };
     }
 
-    const updatedReadBook = await ReadBookModel.findOneAndUpdate(
+    const updatedReading = await ReadingModel.findOneAndUpdate(
       { _id: fromGlobalId(id).id, userId: user._id },
       { readPages: currentPage || 1 },
     );
 
-    ReadBookLoader.clearAndPrimeCache(context, updatedReadBook!._id, updatedReadBook!);
+    ReadingLoader.clearAndPrimeCache(context, updatedReading!._id, updatedReading!);
 
     return {
-      id: readBook._id,
+      id: reading._id,
       error: null,
     };
   },
   outputFields: {
-    readBookEdge: {
-      type: ReadBookConnection.edgeType,
+    readingEdge: {
+      type: ReadingConnection.edgeType,
       resolve: async ({ id }, args, context) => {
-        const readBook = await ReadBookLoader.load(context, id);
+        const reading = await ReadingLoader.load(context, id);
 
-        if (!readBook) {
+        if (!reading) {
           return null;
         }
 
         return {
-          cursor: toGlobalId('ReadBook', readBook._id),
-          node: readBook,
+          cursor: toGlobalId('Reading', reading._id),
+          node: reading,
         };
       },
     },

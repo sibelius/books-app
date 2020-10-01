@@ -7,7 +7,7 @@ declare namespace NodeJS {
       book: number;
       review: number;
       category: number;
-      readBook: number;
+      reading: number;
     };
   }
 }

@@ -6,7 +6,7 @@ import { schema } from '../../../../graphql/schema';
 import {
   clearDbAndRestartCounters,
   connectMongoose,
-  createReadBook,
+  createReading,
   createUser,
   disconnectMongoose,
   getContext,
@@ -20,14 +20,14 @@ beforeEach(clearDbAndRestartCounters);
 
 afterAll(disconnectMongoose);
 
-describe('ReadBookRemoveMutation', () => {
-  it('should remove a readBook', async () => {
+describe('ReadingRemoveMutation', () => {
+  it('should remove a reading', async () => {
     const user = await createUser();
-    const readBook = await createReadBook();
+    const reading = await createReading();
 
     const mutation = gql`
-      mutation M($input: ReadBookRemoveInput!) {
-        ReadBookRemove(input: $input) {
+      mutation M($input: ReadingRemoveInput!) {
+        ReadingRemove(input: $input) {
           success
           error
         }
@@ -36,7 +36,7 @@ describe('ReadBookRemoveMutation', () => {
 
     const variables = {
       input: {
-        id: toGlobalId('ReadBook', readBook._id),
+        id: toGlobalId('Reading', reading._id),
       },
     };
     const rootValue = {};
@@ -44,16 +44,16 @@ describe('ReadBookRemoveMutation', () => {
     const result = await graphql(schema, mutation, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data?.ReadBookRemove.error).toBe(null);
-    expect(result.data?.ReadBookRemove.success).toBe('Book removed with success.');
+    expect(result.data?.ReadingRemove.error).toBe(null);
+    expect(result.data?.ReadingRemove.success).toBe('Book removed with success.');
   });
 
-  it('should not remove a readBook without user', async () => {
-    const readBook = await createReadBook();
+  it('should not remove a reading without user', async () => {
+    const reading = await createReading();
 
     const mutation = gql`
-      mutation M($input: ReadBookRemoveInput!) {
-        ReadBookRemove(input: $input) {
+      mutation M($input: ReadingRemoveInput!) {
+        ReadingRemove(input: $input) {
           success
           error
         }
@@ -62,7 +62,7 @@ describe('ReadBookRemoveMutation', () => {
 
     const variables = {
       input: {
-        id: toGlobalId('ReadBook', readBook._id),
+        id: toGlobalId('Reading', reading._id),
       },
     };
     const rootValue = {};
@@ -70,16 +70,16 @@ describe('ReadBookRemoveMutation', () => {
     const result = await graphql(schema, mutation, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data?.ReadBookRemove.error).toBe('Unauthorized');
-    expect(result.data?.ReadBookRemove.success).toBe(null);
+    expect(result.data?.ReadingRemove.error).toBe('Unauthorized');
+    expect(result.data?.ReadingRemove.success).toBe(null);
   });
 
-  it('should not remove a readBook with invalid readBook id', async () => {
+  it('should not remove a reading with invalid reading id', async () => {
     const user = await createUser();
 
     const mutation = gql`
-      mutation M($input: ReadBookRemoveInput!) {
-        ReadBookRemove(input: $input) {
+      mutation M($input: ReadingRemoveInput!) {
+        ReadingRemove(input: $input) {
           success
           error
         }
@@ -88,7 +88,7 @@ describe('ReadBookRemoveMutation', () => {
 
     const variables = {
       input: {
-        id: toGlobalId('ReadBook', user._id),
+        id: toGlobalId('Reading', user._id),
       },
     };
     const rootValue = {};
@@ -96,17 +96,17 @@ describe('ReadBookRemoveMutation', () => {
     const result = await graphql(schema, mutation, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data?.ReadBookRemove.error).toBe('Book not found.');
-    expect(result.data?.ReadBookRemove.success).toBe(null);
+    expect(result.data?.ReadingRemove.error).toBe('Book not found.');
+    expect(result.data?.ReadingRemove.success).toBe(null);
   });
 
-  it('should not remove a readBook that belongs to other user', async () => {
-    const readBook = await createReadBook();
+  it('should not remove a reading that belongs to other user', async () => {
+    const reading = await createReading();
     const user = await createUser();
 
     const mutation = gql`
-      mutation M($input: ReadBookRemoveInput!) {
-        ReadBookRemove(input: $input) {
+      mutation M($input: ReadingRemoveInput!) {
+        ReadingRemove(input: $input) {
           success
           error
         }
@@ -115,7 +115,7 @@ describe('ReadBookRemoveMutation', () => {
 
     const variables = {
       input: {
-        id: toGlobalId('ReadBook', readBook._id),
+        id: toGlobalId('Reading', reading._id),
       },
     };
     const rootValue = {};
@@ -123,17 +123,17 @@ describe('ReadBookRemoveMutation', () => {
     const result = await graphql(schema, mutation, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data?.ReadBookRemove.error).toBe('Book not found.');
-    expect(result.data?.ReadBookRemove.success).toBe(null);
+    expect(result.data?.ReadingRemove.error).toBe('Book not found.');
+    expect(result.data?.ReadingRemove.success).toBe(null);
   });
 
-  it('should not remove a readBook that is not active', async () => {
+  it('should not remove a reading that is not active', async () => {
     const user = await createUser();
-    const readBook = await createReadBook({ isActive: false });
+    const reading = await createReading({ isActive: false });
 
     const mutation = gql`
-      mutation M($input: ReadBookRemoveInput!) {
-        ReadBookRemove(input: $input) {
+      mutation M($input: ReadingRemoveInput!) {
+        ReadingRemove(input: $input) {
           success
           error
         }
@@ -142,7 +142,7 @@ describe('ReadBookRemoveMutation', () => {
 
     const variables = {
       input: {
-        id: toGlobalId('ReadBook', readBook._id),
+        id: toGlobalId('Reading', reading._id),
       },
     };
     const rootValue = {};
@@ -150,7 +150,7 @@ describe('ReadBookRemoveMutation', () => {
     const result = await graphql(schema, mutation, rootValue, context, variables);
 
     expect(result.errors).toBeUndefined();
-    expect(result.data?.ReadBookRemove.error).toBe('Book not found.');
-    expect(result.data?.ReadBookRemove.success).toBe(null);
+    expect(result.data?.ReadingRemove.error).toBe('Book not found.');
+    expect(result.data?.ReadingRemove.success).toBe(null);
   });
 });

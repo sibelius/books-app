@@ -12,8 +12,8 @@ import {
   IReview,
   Category,
   ICategory,
-  ReadBook,
-  IReadBook,
+  Reading,
+  IReading,
 } from '../../src/models';
 
 import { getObjectId, PLATFORM } from '../../src/common/utils';
@@ -93,10 +93,10 @@ export const createCategory = async (args: DeepPartial<ICategory> = {}) => {
   }).save();
 };
 
-export const createReadBook = async (args: DeepPartial<IReadBook> = {}) => {
+export const createReading = async (args: DeepPartial<IReading> = {}) => {
   const { userId, bookId, readPages, ...rest } = args;
 
-  const n = (global.__COUNTERS__.readBook += 1);
+  const n = (global.__COUNTERS__.reading += 1);
 
   let userObj;
   if (!userId) {
@@ -108,7 +108,7 @@ export const createReadBook = async (args: DeepPartial<IReadBook> = {}) => {
     bookObj = await getOrCreate(Book, createBook);
   }
 
-  return new ReadBook({
+  return new Reading({
     userId: getObjectId(userId || userObj),
     bookId: getObjectId(bookId || bookObj),
     readPages: readPages || n,

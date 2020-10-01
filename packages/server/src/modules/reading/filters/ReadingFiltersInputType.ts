@@ -6,12 +6,12 @@ import { FILTER_CONDITION_TYPE, FilterMapping, buildSortFromOrderByArg } from '.
 
 import { GraphQLArgFilter, ObjectId } from '../../../types';
 
-export type ReadBooksArgFilters = GraphQLArgFilter<{
+export type ReadingsArgFilters = GraphQLArgFilter<{
   orderBy?: Array<{ sort: string; direction: string }>;
   book?: ObjectId;
 }>;
 
-export const readBookFilterMapping: FilterMapping = {
+export const readingFilterMapping: FilterMapping = {
   orderBy: {
     type: FILTER_CONDITION_TYPE.AGGREGATE_PIPELINE,
     pipeline: (value: CreatedAtOrdering[]) => [{ $sort: buildSortFromOrderByArg(value) }],
@@ -50,15 +50,15 @@ export const readBookFilterMapping: FilterMapping = {
   },
 };
 
-const ReadBooksFiltersInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
-  name: 'ReadBookFilters',
-  description: 'Used to filter read books',
+const ReadingsFiltersInputType: GraphQLInputObjectType = new GraphQLInputObjectType({
+  name: 'ReadingFilters',
+  description: 'Used to filter readings',
   fields: () => ({
     OR: {
-      type: GraphQLList(ReadBooksFiltersInputType),
+      type: GraphQLList(ReadingsFiltersInputType),
     },
     AND: {
-      type: GraphQLList(ReadBooksFiltersInputType),
+      type: GraphQLList(ReadingsFiltersInputType),
     },
     orderBy: {
       type: GraphQLList(GraphQLNonNull(CreatedAtOrderingInputType)),
@@ -71,4 +71,4 @@ const ReadBooksFiltersInputType: GraphQLInputObjectType = new GraphQLInputObject
   }),
 });
 
-export default ReadBooksFiltersInputType;
+export default ReadingsFiltersInputType;
