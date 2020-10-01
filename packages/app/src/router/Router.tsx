@@ -1,4 +1,5 @@
-import React, { useReducer, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
+import { useLazyLoadQuery, graphql, useRelayEnvironment, fetchQuery } from 'react-relay/hooks';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 //import SplashScreen from 'react-native-splash-screen';
@@ -6,85 +7,49 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { AUTH_KEY } from '../common/config';
 
 import AuthContext from './AuthContext';
-
 import Auth from './AuthRouter';
 import App from './AppRouter';
 
-const Router = () => {
-  const [state, dispatch] = useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            isLoading: false,
-            isSigin: true,
-          };
-        case 'SIGN_IN':
-          return {
-            ...prevState,
-            isLoading: false,
-            isSigin: true,
-          };
-        case 'SIGN_OUT':
-          return {
-            ...prevState,
-            isLoading: false,
-            isSigin: false,
-          };
-      }
-    },
-    {
-      isLoading: true,
-      isSigin: false,
-    },
-  );
+import { RouterQuery } from './__generated__/RouterQuery.graphql';
 
-  useEffect(() => {
-    const bootstrapAsync = async () => {
-      const userToken = await AsyncStorage.getItem(AUTH_KEY);
-
-      if (userToken) {
-        dispatch({ type: 'RESTORE_TOKEN' });
-      } else {
-        dispatch({ type: 'SIGN_OUT' });
-      }
-    };
-
-    bootstrapAsync();
-  }, []);
-
-  useEffect(() => {
-    if (!state.isLoading) {
-      //SplashScreen.hide();
+const routerQuery = graphql`
+  query RouterQuery {
+    me {
+      id
     }
-  }, [state.isLoading]);
+  }
+`;
+
+const Router = () => {
+  const environment = useRelayEnvironment();
+
+  const data = useLazyLoadQuery<RouterQuery>(routerQuery, {});
+
+  const refresh = useCallback(() => {
+    fetchQuery(environment, routerQuery, {}).toPromise();
+  }, [environment]);
 
   const authContext = useMemo(
     () => ({
       signIn: async (token: string) => {
         await AsyncStorage.setItem(AUTH_KEY, token);
-        dispatch({ type: 'SIGN_IN' });
+        refresh();
       },
       signOut: async () => {
         await AsyncStorage.removeItem(AUTH_KEY);
-        dispatch({ type: 'SIGN_OUT' });
-      },
-      signUp: async (token: string) => {
-        await AsyncStorage.setItem(AUTH_KEY, token);
-        dispatch({ type: 'SIGN_IN' });
+        refresh();
       },
     }),
-    [],
+    [refresh],
   );
 
-  if (state.isLoading) {
-    return null;
-  }
+  //useEffect(() => {
+  // SplashScreen.hide();
+  //}, [])
 
   return (
     <AuthContext.Provider value={authContext}>
-      <NavigationContainer>{!state.isSigin ? <Auth /> : <App />}</NavigationContainer>
+      <NavigationContainer>{data?.me?.id ? <App /> : <Auth />}</NavigationContainer>
     </AuthContext.Provider>
   );
 };

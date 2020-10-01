@@ -13,7 +13,8 @@ const relayEnvironment = new Environment({
   store: new Store(new RecordSource(), {
     gcReleaseBufferSize: 10,
   }),
-  log: __DEV__ ? RelayNetworkLoggerTransaction : null,
+  // @TODO - improve logger
+  //log: __DEV__ ? RelayNetworkLoggerTransaction : null,
 });
 
 if (__DEV__) {

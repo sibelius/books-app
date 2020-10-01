@@ -5,10 +5,12 @@
   "module": "src/index.ts",
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.0",
-    "react-relay": "0.0.0-experimental-8cc94ddc",
-    "relay-runtime": "9.0.0"
+    "react-relay": "^0.0.0-experimental-183bdd28"
   },
   "devDependencies": {
-    "@booksapp/types": "^0.0.1"
+    "@booksapp/types": "^0.0.1",
+    "@types/react-relay": "^7.0.12",
+    "@types/relay-runtime": "^10.0.4",
+    "relay-runtime": "^10.0.1"
   }
 }
