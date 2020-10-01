@@ -11,6 +11,8 @@ import { LoggedGraphQLContext } from '../../../types';
 
 import { BookLoader } from '../../../loader';
 
+import ReadingModel from '../../reading/ReadingModel';
+
 import ReviewAddMutationSchema from './validationSchemas/ReviewAddMutationSchema';
 
 type ReviewAddArgs = {
@@ -43,6 +45,18 @@ const mutation = mutationWithClientMutationId({
 
     if (!book) {
       return { error: t('book', 'TheBookIdIsInvalid') };
+    }
+
+    const prevReview = await ReviewModel.findOne({ userId: user._id, bookId: book._id });
+
+    if (prevReview) {
+      return { error: t('review', 'AReviewForThisBookWasAlreadyCreated') };
+    }
+
+    const reading = await ReadingModel.findOne({ userId: user._id, bookId: book._id });
+
+    if (!reading || reading.readPages < book.pages) {
+      return { error: t('review', 'UnableToReviewBookWithoutFinishingIt') };
     }
 
     const review = await new ReviewModel({
