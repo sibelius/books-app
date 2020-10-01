@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import faker from 'faker';
 
 import connectDatabase from '../../src/common/database';
 
@@ -8,6 +9,7 @@ import createUser from './createUser';
 import createCategory from './createCategory';
 import createBook from './createBook';
 import createReview from './createReview';
+import createReading from './createReading';
 
 const categories = [
   'Science and Nature',
@@ -32,14 +34,15 @@ const runScript = async () => {
       password: '123456',
       email: { email: 'jean@booksapp.com', wasVerified: true },
     });
-    console.log('👤 Jean User created\n');
+    console.log('👤 Jean user created\n');
   } catch (err) {
-    console.log('⚠️ Jean User already created:', err);
+    console.log('⚠️ Jean user already created\n:', err);
   }
 
-  const books = 10; // 100 books total
-  const users = 100; // 1000 users total
-  const reviewsPerUser = 5; // 50000 reviews total
+  const books = 10; // 100 books
+  const users = 100; // 1000 users
+  let unfinishedReadings = 0;
+  let finishedReadings = 0;
 
   for (let i = 0; i < categories.length; i++) {
     const name = categories[i];
@@ -58,27 +61,46 @@ const runScript = async () => {
       for (let j = 0; j < bookArr.length; j++) {
         const book = bookArr[j];
 
-        for (let l = 0; l < reviewsPerUser; l++) {
-          await createReview({ bookId: book._id, userId: user._id });
+        const readingPerUser = faker.random.number({ min: 1, max: 7 }); // between 10000 and 70000 readings
+
+        for (let l = 0; l < readingPerUser; l++) {
+          const shouldFinishBook = faker.random.boolean();
+
+          await createReading({
+            bookId: book._id,
+            userId: user._id,
+            readPages: shouldFinishBook ? book.pages : faker.random.number({ min: 1, max: book.pages - 1 }),
+          });
+
+          if (shouldFinishBook) {
+            await createReview({ bookId: book._id, userId: user._id }); // max of 70000 reviews
+            finishedReadings += 1;
+          } else {
+            unfinishedReadings += 1;
+          }
         }
       }
     }
   }
 
-  console.log(`📚 ${categories.length} Categories created\n`);
+  console.log(`🏷️  ${categories.length} categories created\n`);
+  console.log(`📚 ${books * categories.length} books created\n`);
+  console.log(`👥 ${users * categories.length} users created\n`);
+  console.log(`📕 ${finishedReadings} finished readings created\n`);
+  console.log(`📖 ${unfinishedReadings} unfinished readings created\n`);
 };
 
 (async () => {
   try {
     await connectDatabase();
   } catch (error) {
-    console.error('\n❌ Could not connect to database');
+    console.error('❌ Could not connect to database');
     process.exit(1);
   }
 
   try {
     await runScript();
-    console.log('\n✔️  Database seed completed');
+    console.log('✔️  Database seed completed');
   } catch (err) {
     console.log('err:', err);
     process.exit(1);
